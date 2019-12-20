@@ -1,0 +1,8 @@
+= Confluence REST API Client for Java
+
+A Java library for publishing pages and attachments to Confluence via the REST API.
+
+== Credits
+This library is based on a subset of the
+https://github.com/confluence-publisher/confluence-publisher[confluence-publisher/confluence-publisher]
+project on GitHub, by Alain Sahli and Christian Stettler.
