@@ -2,6 +2,28 @@
 
 A Java library for publishing pages and attachments to Confluence via the REST API.
 
+== Building
+This is how to build the library locally and install the package in the local Maven repository:
+
+    $ mvn clean install
+
+== Releasing
+This is how to version and release the package:
+
+. First build, to ensure the code compiles and builds cleanly.
+. Determine which version is next:
+
+    $ git tag -l
+    confluence-client-0.0.1
+
+. Tag the next version:
+
+    $ git tag confluence-client-0.0.2
+
+. Clean build and deploy:
+
+    $ mvn -Dversion=0.0.2 clean deploy
+
 == Credits
 This library is based on a subset of the
 https://github.com/confluence-publisher/confluence-publisher[confluence-publisher/confluence-publisher]
