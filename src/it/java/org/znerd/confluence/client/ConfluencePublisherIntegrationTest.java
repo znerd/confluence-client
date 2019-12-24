@@ -22,8 +22,6 @@ import org.junit.Test;
 import org.znerd.confluence.client.http.ConfluenceRestClient;
 import org.znerd.confluence.client.metadata.ConfluencePageMetadata;
 import org.znerd.confluence.client.metadata.ConfluencePublisherMetadata;
-import org.znerd.confluence.client.ConfluencePublisher;
-import org.znerd.confluence.client.PublishingStrategy;
 
 import java.nio.file.Paths;
 import java.util.HashMap;

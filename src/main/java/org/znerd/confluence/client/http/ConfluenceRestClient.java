@@ -19,6 +19,8 @@ package org.znerd.confluence.client.http;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -42,6 +44,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Function;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -58,10 +61,10 @@ import static org.znerd.confluence.client.utils.AssertUtils.assertMandatoryParam
 public class ConfluenceRestClient implements ConfluenceClient {
 
     private final CloseableHttpClient httpClient;
-    private final String username;
-    private final String password;
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    private final HttpRequestFactory httpRequestFactory;
+    private final String              username;
+    private final String              password;
+    private final ObjectMapper        objectMapper = new ObjectMapper();
+    private final HttpRequestFactory  httpRequestFactory;
 
     public ConfluenceRestClient(String rootConfluenceUrl, boolean disableSslVerification, String username, String password) {
         this(rootConfluenceUrl, null, disableSslVerification, username, password);
@@ -191,10 +194,24 @@ public class ConfluenceRestClient implements ConfluenceClient {
     }
 
     private JsonNode parseJsonResponse(HttpResponse response) {
+        expectJsonMimeType(response);
+        final HttpEntity entity = response.getEntity();
         try {
-            return this.objectMapper.readTree(response.getEntity().getContent());
+            return this.objectMapper.readTree(entity.getContent());
         } catch (IOException e) {
             throw new RuntimeException("Could not read JSON response", e);
+        }
+    }
+
+    private void expectJsonMimeType(final HttpResponse response) {
+        final Header header = response.getFirstHeader("Content-Type");
+        if (header != null) {
+            final String headerValue = header.getValue();
+            final String headerValueLC = headerValue.toLowerCase(Locale.US);
+            final String expectedMimeType = "application/json";
+            if (! (headerValueLC.equals(expectedMimeType) || headerValueLC.equals(expectedMimeType + ';'))) {
+                throw new RuntimeException("Unexpected [Content-Type] header value [" + headerValue + "], while expecting [" + expectedMimeType + "].");
+            }
         }
     }
 
@@ -219,7 +236,7 @@ public class ConfluenceRestClient implements ConfluenceClient {
         try (CloseableHttpResponse response = this.httpClient.execute(httpRequest)) {
             return responseHandler.apply(response);
         } catch (IOException e) {
-            throw new RuntimeException("Request could not be sent" + httpRequest, e);
+            throw new RuntimeException("Request could not be sent: " + httpRequest, e);
         }
     }
 
@@ -359,13 +376,13 @@ public class ConfluenceRestClient implements ConfluenceClient {
 
     private static CloseableHttpClient defaultHttpClient(ProxyConfiguration proxyConfiguration, boolean disableSslVerification) {
         RequestConfig requestConfig = RequestConfig.custom()
-                .setConnectionRequestTimeout(20 * 1000)
-                .setConnectTimeout(20 * 1000)
-                .setCookieSpec(STANDARD)
-                .build();
+            .setConnectionRequestTimeout(20 * 1000)
+            .setConnectTimeout(20 * 1000)
+            .setCookieSpec(STANDARD)
+            .build();
 
         HttpClientBuilder builder = HttpClients.custom()
-                .setDefaultRequestConfig(requestConfig);
+            .setDefaultRequestConfig(requestConfig);
 
         if (proxyConfiguration != null) {
             if (proxyConfiguration.proxyHost() != null) {
@@ -395,8 +412,8 @@ public class ConfluenceRestClient implements ConfluenceClient {
     private static SSLContext trustAllSslContext() {
         try {
             return new SSLContextBuilder()
-                    .loadTrustMaterial((chain, authType) -> true)
-                    .build();
+                .loadTrustMaterial((chain, authType) -> true)
+                .build();
         } catch (Exception e) {
             throw new RuntimeException("Could not create trust-all SSL context", e);
         }
@@ -406,14 +423,13 @@ public class ConfluenceRestClient implements ConfluenceClient {
         return "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes(UTF_8));
     }
 
-
     public static class ProxyConfiguration {
 
-        private final String proxyScheme;
-        private final String proxyHost;
+        private final String  proxyScheme;
+        private final String  proxyHost;
         private final Integer proxyPort;
-        private final String proxyUsername;
-        private final String proxyPassword;
+        private final String  proxyUsername;
+        private final String  proxyPassword;
 
         public ProxyConfiguration(String proxyScheme, String proxyHost, Integer proxyPort, String proxyUsername, String proxyPassword) {
             this.proxyScheme = proxyScheme;
@@ -442,7 +458,5 @@ public class ConfluenceRestClient implements ConfluenceClient {
         public String proxyPassword() {
             return this.proxyPassword;
         }
-
     }
-
 }
