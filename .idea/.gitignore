@@ -1,2 +1,5 @@
 # Default ignored files
 /workspace.xml
+/$CACHE_FILE$
+/checkstyle-idea.xml
+/codeStyles/codeStyleConfig.xml

@@ -1,0 +1,127 @@
+<component name="ProjectCodeStyleConfiguration">
+  <code_scheme name="Project" version="173">
+    <option name="LINE_SEPARATOR" value="&#10;" />
+    <option name="GENERATE_FINAL_LOCALS" value="true" />
+    <option name="GENERATE_FINAL_PARAMETERS" value="true" />
+    <option name="VISIBILITY" value="EscalateVisible" />
+    <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="20" />
+    <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="20" />
+    <option name="RIGHT_MARGIN" value="80" />
+    <option name="FORMATTER_TAGS_ENABLED" value="true" />
+    <JavaCodeStyleSettings>
+      <option name="GENERATE_FINAL_LOCALS" value="true" />
+      <option name="GENERATE_FINAL_PARAMETERS" value="true" />
+      <option name="VISIBILITY" value="EscalateVisible" />
+      <option name="CLASS_NAMES_IN_JAVADOC" value="3" />
+      <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="20" />
+      <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="20" />
+      <option name="JD_P_AT_EMPTY_LINES" value="false" />
+    </JavaCodeStyleSettings>
+    <XML>
+      <option name="XML_ATTRIBUTE_WRAP" value="0" />
+      <option name="XML_TEXT_WRAP" value="0" />
+      <option name="XML_KEEP_LINE_BREAKS" value="false" />
+      <option name="XML_KEEP_BLANK_LINES" value="1" />
+      <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
+    </XML>
+    <codeStyleSettings language="CSS">
+      <indentOptions>
+        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="Gherkin">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="4" />
+        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="Groovy">
+      <option name="RIGHT_MARGIN" value="240" />
+      <indentOptions>
+        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="HTML">
+      <indentOptions>
+        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="JAVA">
+      <option name="RIGHT_MARGIN" value="200" />
+      <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
+      <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false" />
+      <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="1" />
+      <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
+      <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="0" />
+      <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
+      <option name="ALIGN_MULTILINE_RESOURCES" value="false" />
+      <option name="ALIGN_GROUP_FIELD_DECLARATIONS" value="true" />
+      <option name="SPACE_WITHIN_ARRAY_INITIALIZER_BRACES" value="true" />
+      <option name="SPACE_BEFORE_ARRAY_INITIALIZER_LBRACE" value="true" />
+      <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true" />
+      <option name="FIELD_ANNOTATION_WRAP" value="0" />
+      <indentOptions>
+        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      </indentOptions>
+      <arrangement>
+        <groups>
+          <group>
+            <type>GETTERS_AND_SETTERS</type>
+            <order>KEEP</order>
+          </group>
+          <group>
+            <type>OVERRIDDEN_METHODS</type>
+            <order>KEEP</order>
+          </group>
+          <group>
+            <type>DEPENDENT_METHODS</type>
+            <order>DEPTH_FIRST</order>
+          </group>
+        </groups>
+      </arrangement>
+    </codeStyleSettings>
+    <codeStyleSettings language="JSON">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="4" />
+        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="JSP">
+      <indentOptions>
+        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="JSPX">
+      <indentOptions>
+        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="RHTML">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="4" />
+        <option name="TAB_SIZE" value="4" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="XML">
+      <indentOptions>
+        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="kotlin">
+      <indentOptions>
+        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="ruby">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="4" />
+        <option name="TAB_SIZE" value="4" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="yaml">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="4" />
+      </indentOptions>
+    </codeStyleSettings>
+  </code_scheme>
+</component>
