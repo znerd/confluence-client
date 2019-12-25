@@ -17,7 +17,6 @@
 package org.znerd.confluence.client.http;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.Header;
@@ -211,7 +210,7 @@ public class ConfluenceRestClient implements ConfluenceClient {
             final String headerValue = header.getValue();
             final String headerValueLC = headerValue.toLowerCase(Locale.US);
             final String expectedMimeType = "application/json";
-            if (! (headerValueLC.equals(expectedMimeType) || headerValueLC.equals(expectedMimeType + ';'))) {
+            if (!(headerValueLC.equals(expectedMimeType) || headerValueLC.equals(expectedMimeType + ';'))) {
                 throw new JsonParseRuntimeException("Unexpected [Content-Type] header value [" + headerValue + "], while expecting [" + expectedMimeType + "].");
             }
         }
