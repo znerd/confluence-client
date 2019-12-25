@@ -17,6 +17,7 @@
 package org.znerd.confluence.client.http;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.Header;
@@ -37,6 +38,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.ssl.SSLContextBuilder;
+import org.znerd.confluence.client.support.JsonParseRuntimeException;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
@@ -193,24 +195,24 @@ public class ConfluenceRestClient implements ConfluenceClient {
         });
     }
 
-    private JsonNode parseJsonResponse(HttpResponse response) {
+    private JsonNode parseJsonResponse(HttpResponse response) throws JsonParseRuntimeException {
         expectJsonMimeType(response);
         final HttpEntity entity = response.getEntity();
         try {
             return this.objectMapper.readTree(entity.getContent());
         } catch (IOException e) {
-            throw new RuntimeException("Could not read JSON response", e);
+            throw new JsonParseRuntimeException("Could not read JSON response", e);
         }
     }
 
-    private void expectJsonMimeType(final HttpResponse response) {
+    private void expectJsonMimeType(HttpResponse response) {
         final Header header = response.getFirstHeader("Content-Type");
         if (header != null) {
             final String headerValue = header.getValue();
             final String headerValueLC = headerValue.toLowerCase(Locale.US);
             final String expectedMimeType = "application/json";
             if (! (headerValueLC.equals(expectedMimeType) || headerValueLC.equals(expectedMimeType + ';'))) {
-                throw new RuntimeException("Unexpected [Content-Type] header value [" + headerValue + "], while expecting [" + expectedMimeType + "].");
+                throw new JsonParseRuntimeException("Unexpected [Content-Type] header value [" + headerValue + "], while expecting [" + expectedMimeType + "].");
             }
         }
     }
@@ -235,7 +237,7 @@ public class ConfluenceRestClient implements ConfluenceClient {
 
         try (CloseableHttpResponse response = this.httpClient.execute(httpRequest)) {
             return responseHandler.apply(response);
-        } catch (IOException e) {
+        } catch (IOException | JsonParseRuntimeException e) {
             throw new RuntimeException("Request could not be sent: " + httpRequest, e);
         }
     }
