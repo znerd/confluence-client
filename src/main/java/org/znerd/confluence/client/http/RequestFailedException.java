@@ -20,7 +20,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
-import org.znerd.confluence.client.utils.InputStreamUtils;
+import org.znerd.confluence.client.utils.IoUtils;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -63,7 +63,7 @@ public class RequestFailedException extends RuntimeException {
         try {
             InputStream content = entity.getContent();
             Charset encoding = entity.getContentEncoding() == null ? defaultCharset() : Charset.forName(entity.getContentEncoding().getValue());
-            String contentString = InputStreamUtils.inputStreamAsString(content, encoding);
+            String contentString = IoUtils.inputStreamAsString(content, encoding);
 
             return contentString;
         } catch (Exception ignored) {

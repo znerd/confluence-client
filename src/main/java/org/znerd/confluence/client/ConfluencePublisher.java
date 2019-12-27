@@ -23,7 +23,7 @@ import org.znerd.confluence.client.http.NotFoundException;
 import org.znerd.confluence.client.metadata.ConfluencePageMetadata;
 import org.znerd.confluence.client.metadata.ConfluencePublisherMetadata;
 import org.znerd.confluence.client.utils.AssertUtils;
-import org.znerd.confluence.client.utils.InputStreamUtils;
+import org.znerd.confluence.client.utils.IoUtils;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -161,7 +161,7 @@ public class ConfluencePublisher {
             contentId = this.confluenceClient.getPageByTitle(spaceKey, page.getTitle());
             updatePage(contentId, ancestorId, page);
         } catch (NotFoundException e) {
-            String content = InputStreamUtils.fileContent(page.getContentFilePath(), UTF_8);
+            String content = IoUtils.fileContent(page.getContentFilePath(), UTF_8);
             contentId = this.confluenceClient.addPageUnderAncestor(spaceKey, ancestorId, page.getTitle(), content, this.versionMessage);
             this.confluenceClient.setPropertyByKey(contentId, CONTENT_HASH_PROPERTY_KEY, hash(content));
             this.confluencePublisherListener.pageAdded(new ConfluencePage(contentId, page.getTitle(), content, INITIAL_PAGE_VERSION));
@@ -171,7 +171,7 @@ public class ConfluencePublisher {
     }
 
     private void updatePage(String contentId, String ancestorId, ConfluencePageMetadata page) {
-        String content = InputStreamUtils.fileContent(page.getContentFilePath(), UTF_8);
+        String content = IoUtils.fileContent(page.getContentFilePath(), UTF_8);
         ConfluencePage existingPage = this.confluenceClient.getPageWithContentAndVersionById(contentId);
         String existingContentHash = this.confluenceClient.getPropertyByKey(contentId, CONTENT_HASH_PROPERTY_KEY);
         String newContentHash = hash(content);

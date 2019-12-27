@@ -30,4 +30,11 @@ public final class AssertUtils {
             throw new IllegalArgumentException(parameterName + " must be set");
         }
     }
+
+    public static <T> T assertNotNull(T parameterValue, String parameterName) {
+        if (parameterValue == null) {
+            throw new IllegalArgumentException(parameterName + " == null");
+        }
+        return parameterValue;
+    }
 }

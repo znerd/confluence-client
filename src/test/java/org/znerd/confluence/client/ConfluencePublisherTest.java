@@ -30,7 +30,7 @@ import org.znerd.confluence.client.http.ConfluenceRestClient;
 import org.znerd.confluence.client.http.NotFoundException;
 import org.znerd.confluence.client.metadata.ConfluencePageMetadata;
 import org.znerd.confluence.client.metadata.ConfluencePublisherMetadata;
-import org.znerd.confluence.client.utils.InputStreamUtils;
+import org.znerd.confluence.client.utils.IoUtils;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -206,8 +206,8 @@ public class ConfluencePublisherTest {
         verify(confluenceRestClientMock).addPageUnderAncestor("~personalSpace", "72189173", "Some Confluence Content", "<h1>Some Confluence Content</h1>", null);
         verify(confluenceRestClientMock, times(2)).addAttachment(contentId.capture(), attachmentFileName.capture(), attachmentContent.capture());
         assertThat(contentId.getAllValues(), contains("4321", "4321"));
-        assertThat(InputStreamUtils.inputStreamAsString(attachmentContent.getAllValues().get(attachmentFileName.getAllValues().indexOf("attachmentOne.txt")), UTF_8), is("attachment1"));
-        assertThat(InputStreamUtils.inputStreamAsString(attachmentContent.getAllValues().get(attachmentFileName.getAllValues().indexOf("attachmentTwo.txt")), UTF_8), is("attachment2"));
+        assertThat(IoUtils.inputStreamAsString(attachmentContent.getAllValues().get(attachmentFileName.getAllValues().indexOf("attachmentOne.txt")), UTF_8), is("attachment1"));
+        assertThat(IoUtils.inputStreamAsString(attachmentContent.getAllValues().get(attachmentFileName.getAllValues().indexOf("attachmentTwo.txt")), UTF_8), is("attachment2"));
         verify(confluenceRestClientMock).setPropertyByKey("4321", "attachmentOne.txt-hash", sha256Hex("attachment1"));
         verify(confluenceRestClientMock).setPropertyByKey("4321", "attachmentTwo.txt-hash", sha256Hex("attachment2"));
     }
@@ -389,12 +389,12 @@ public class ConfluencePublisherTest {
         inOrder.verify(confluenceRestClientMock).deletePropertyByKey("72189173", "attachmentOne.txt-hash");
         inOrder.verify(confluenceRestClientMock).updateAttachmentContent(eq("72189173"), eq("att1"), content.capture());
         inOrder.verify(confluenceRestClientMock).setPropertyByKey("72189173", "attachmentOne.txt-hash", sha256Hex("attachment1"));
-        assertThat(InputStreamUtils.inputStreamAsString(content.getValue(), UTF_8), is("attachment1"));
+        assertThat(IoUtils.inputStreamAsString(content.getValue(), UTF_8), is("attachment1"));
 
         verify(confluenceRestClientMock).deletePropertyByKey("72189173", "attachmentTwo.txt-hash");
         verify(confluenceRestClientMock).updateAttachmentContent(eq("72189173"), eq("att2"), content.capture());
         verify(confluenceRestClientMock).setPropertyByKey("72189173", "attachmentTwo.txt-hash", sha256Hex("attachment2"));
-        assertThat(InputStreamUtils.inputStreamAsString(content.getValue(), UTF_8), is("attachment2"));
+        assertThat(IoUtils.inputStreamAsString(content.getValue(), UTF_8), is("attachment2"));
 
         verify(confluenceRestClientMock, never()).addAttachment(anyString(), anyString(), any(InputStream.class));
     }

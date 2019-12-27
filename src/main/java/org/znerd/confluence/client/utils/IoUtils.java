@@ -17,6 +17,7 @@
 package org.znerd.confluence.client.utils;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -28,18 +29,10 @@ import java.util.stream.Collectors;
 /**
  * @author Alain Sahli
  */
-public final class InputStreamUtils {
+public final class IoUtils {
 
-    private InputStreamUtils() {
+    private IoUtils() {
         throw new UnsupportedOperationException("Utils class cannot be instantiated");
-    }
-
-    public static String inputStreamAsString(InputStream is, Charset encoding) {
-        try (BufferedReader buffer = new BufferedReader(new InputStreamReader(is, encoding))) {
-            return buffer.lines().collect(Collectors.joining("\n"));
-        } catch (IOException e) {
-            throw new RuntimeException("Could not convert InputStream to String ", e);
-        }
     }
 
     public static String fileContent(String filePath, Charset encoding) {
@@ -50,4 +43,18 @@ public final class InputStreamUtils {
         }
     }
 
+    public static String inputStreamAsString(InputStream is, Charset encoding) {
+        try (BufferedReader buffer = new BufferedReader(new InputStreamReader(is, encoding))) {
+            return buffer.lines().collect(Collectors.joining("\n"));
+        } catch (IOException e) {
+            throw new RuntimeException("Could not convert InputStream to String ", e);
+        }
+    }
+
+    public static void closeQuietly(Closeable closeable) {
+        try {
+            closeable.close();
+        } catch (IOException ignored) {
+        }
+    }
 }

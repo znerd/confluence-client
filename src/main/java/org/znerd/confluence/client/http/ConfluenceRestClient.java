@@ -38,6 +38,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.znerd.confluence.client.support.JsonParseRuntimeException;
+import org.znerd.confluence.client.utils.IoUtils;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
@@ -53,19 +54,18 @@ import static java.util.Collections.singletonList;
 import static org.apache.http.HttpHeaders.AUTHORIZATION;
 import static org.apache.http.HttpHeaders.PROXY_AUTHORIZATION;
 import static org.apache.http.client.config.CookieSpecs.STANDARD;
-import static org.znerd.confluence.client.utils.AssertUtils.assertMandatoryParameter;
+import static org.znerd.confluence.client.utils.AssertUtils.assertNotNull;
 
 /**
  * @author Alain Sahli
  * @author Christian Stettler
  */
 public class ConfluenceRestClient implements ConfluenceClient {
-
     private final CloseableHttpClient httpClient;
     private final String              username;
     private final String              password;
-    private final ObjectMapper        objectMapper = new ObjectMapper();
     private final HttpRequestFactory  httpRequestFactory;
+    private final ObjectMapper        jsonObjectMapper;
 
     public ConfluenceRestClient(String rootConfluenceUrl, boolean disableSslVerification, String username, String password) {
         this(rootConfluenceUrl, null, disableSslVerification, username, password);
@@ -76,29 +76,24 @@ public class ConfluenceRestClient implements ConfluenceClient {
     }
 
     public ConfluenceRestClient(String rootConfluenceUrl, CloseableHttpClient httpClient, String username, String password) {
-        assertMandatoryParameter(httpClient != null, "httpClient");
-
-        this.httpClient = httpClient;
+        this.httpClient = assertNotNull(httpClient, "httpClient");
         this.username = username;
         this.password = password;
-
-        this.httpRequestFactory = new HttpRequestFactory(rootConfluenceUrl);
-        configureObjectMapper();
+        this.httpRequestFactory = new HttpRequestFactory(assertNotNull(rootConfluenceUrl, "rootConfluenceUrl"));
+        this.jsonObjectMapper = createJsonObjectMapper();
     }
 
-    private void configureObjectMapper() {
-        this.objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+    private static ObjectMapper createJsonObjectMapper() {
+        final ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+        return objectMapper;
     }
 
     @Override
     public String addPageUnderAncestor(String spaceKey, String ancestorId, String title, String content, String versionMessage) {
         HttpPost addPageUnderSpaceRequest = this.httpRequestFactory.addPageUnderAncestorRequest(spaceKey, ancestorId, title, content, versionMessage);
 
-        return sendRequestAndFailIfNot20x(addPageUnderSpaceRequest, (response) -> {
-            String contentId = extractIdFromJsonNode(parseJsonResponse(response));
-
-            return contentId;
-        });
+        return sendRequestAndFailIfNot20x(addPageUnderSpaceRequest, (response) -> extractIdFromJsonNode(parseJsonResponse(response)));
     }
 
     @Override
@@ -129,9 +124,7 @@ public class ConfluenceRestClient implements ConfluenceClient {
                 throw new MultipleResultsException();
             }
 
-            String contentId = extractIdFromJsonNode(jsonNode.withArray("results").elements().next());
-
-            return contentId;
+            return extractIdFromJsonNode(jsonNode.withArray("results").elements().next());
         });
     }
 
@@ -139,7 +132,7 @@ public class ConfluenceRestClient implements ConfluenceClient {
     public void addAttachment(String contentId, String attachmentFileName, InputStream attachmentContent) {
         HttpPost addAttachmentRequest = this.httpRequestFactory.addAttachmentRequest(contentId, attachmentFileName, attachmentContent);
         sendRequestAndFailIfNot20x(addAttachmentRequest, (response) -> {
-            closeInputStream(attachmentContent);
+            IoUtils.closeQuietly(attachmentContent);
 
             return null;
         });
@@ -149,7 +142,7 @@ public class ConfluenceRestClient implements ConfluenceClient {
     public void updateAttachmentContent(String contentId, String attachmentId, InputStream attachmentContent) {
         HttpPost updateAttachmentContentRequest = this.httpRequestFactory.updateAttachmentContentRequest(contentId, attachmentId, attachmentContent);
         sendRequestAndFailIfNot20x(updateAttachmentContentRequest, (response) -> {
-            closeInputStream(attachmentContent);
+            IoUtils.closeQuietly(attachmentContent);
 
             return null;
         });
@@ -177,9 +170,7 @@ public class ConfluenceRestClient implements ConfluenceClient {
                 throw new MultipleResultsException();
             }
 
-            ConfluenceAttachment attachment = extractConfluenceAttachment(jsonNode.withArray("results").elements().next());
-
-            return attachment;
+            return extractConfluenceAttachment(jsonNode.withArray("results").elements().next());
         });
     }
 
@@ -187,18 +178,14 @@ public class ConfluenceRestClient implements ConfluenceClient {
     public ConfluencePage getPageWithContentAndVersionById(String contentId) {
         HttpGet pageByIdRequest = this.httpRequestFactory.getPageByIdRequest(contentId, "body.storage,version");
 
-        return sendRequestAndFailIfNot20x(pageByIdRequest, (response) -> {
-            ConfluencePage confluencePage = extractConfluencePageWithContent(parseJsonResponse(response));
-
-            return confluencePage;
-        });
+        return sendRequestAndFailIfNot20x(pageByIdRequest, (response) -> extractConfluencePageWithContent(parseJsonResponse(response)));
     }
 
     private JsonNode parseJsonResponse(HttpResponse response) throws JsonParseRuntimeException {
         expectJsonMimeType(response);
         final HttpEntity entity = response.getEntity();
         try {
-            return this.objectMapper.readTree(entity.getContent());
+            return this.jsonObjectMapper.readTree(entity.getContent());
         } catch (IOException e) {
             throw new JsonParseRuntimeException("Could not read JSON response", e);
         }
@@ -329,10 +316,14 @@ public class ConfluenceRestClient implements ConfluenceClient {
     private static ConfluencePage extractConfluencePageWithContent(JsonNode jsonNode) {
         String id = extractIdFromJsonNode(jsonNode);
         String title = extractTitleFromJsonNode(jsonNode);
-        String content = jsonNode.path("body").path("storage").get("value").asText();
+        String content = extractContentFromJsonNode(jsonNode);
         int version = extractVersionFromJsonNode(jsonNode);
 
         return new ConfluencePage(id, title, content, version);
+    }
+
+    private static String extractContentFromJsonNode(final JsonNode jsonNode) {
+        return jsonNode.path("body").path("storage").get("value").asText();
     }
 
     private static ConfluencePage extractConfluencePageWithoutContent(JsonNode jsonNode) {
@@ -366,13 +357,6 @@ public class ConfluenceRestClient implements ConfluenceClient {
 
     private static String extractPropertyValueFromJsonNode(JsonNode jsonNode) {
         return jsonNode.path("value").asText();
-    }
-
-    private static void closeInputStream(InputStream inputStream) {
-        try {
-            inputStream.close();
-        } catch (IOException ignored) {
-        }
     }
 
     private static CloseableHttpClient defaultHttpClient(ProxyConfiguration proxyConfiguration, boolean disableSslVerification) {

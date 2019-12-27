@@ -31,7 +31,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
-import org.znerd.confluence.client.utils.InputStreamUtils;
+import org.znerd.confluence.client.utils.IoUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -240,7 +240,7 @@ public class ConfluenceRestClientTest {
     public void getPageById_withExistingContentId_returnsPageContent() throws Exception {
         // arrange
         String responseFilePath = "src/test/resources/org/znerd/confluence/client/http/page-content.json";
-        CloseableHttpClient httpClientMock = recordHttpClientForSingleResponseWithContentAndStatusCode(InputStreamUtils.fileContent(responseFilePath, UTF_8), 200);
+        CloseableHttpClient httpClientMock = recordHttpClientForSingleResponseWithContentAndStatusCode(IoUtils.fileContent(responseFilePath, UTF_8), 200);
         ConfluenceRestClient confluenceRestClient = new ConfluenceRestClient(CONFLUENCE_ROOT_URL, httpClientMock, null, null);
 
         // act

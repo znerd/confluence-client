@@ -24,7 +24,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.znerd.confluence.client.utils.InputStreamUtils;
+import org.znerd.confluence.client.utils.IoUtils;
 import org.znerd.confluence.client.utils.SameJsonAsMatcher;
 
 import java.io.ByteArrayInputStream;
@@ -86,8 +86,8 @@ public class HttpRequestFactoryTest {
         assertThat(addPageUnderAncestorRequest.getURI().toString(), is(CONFLUENCE_REST_API_ENDPOINT + "/content"));
         assertThat(addPageUnderAncestorRequest.getFirstHeader("Content-Type").getValue(), is(APPLICATION_JSON_UTF8));
 
-        String jsonPayload = InputStreamUtils.inputStreamAsString(addPageUnderAncestorRequest.getEntity().getContent(), UTF_8);
-        String expectedJsonPayload = InputStreamUtils.fileContent(Paths.get(CLASS_LOCATION, "add-page-request-ancestor-id.json").toString(), UTF_8);
+        String jsonPayload = IoUtils.inputStreamAsString(addPageUnderAncestorRequest.getEntity().getContent(), UTF_8);
+        String expectedJsonPayload = IoUtils.fileContent(Paths.get(CLASS_LOCATION, "add-page-request-ancestor-id.json").toString(), UTF_8);
         assertThat(jsonPayload, SameJsonAsMatcher.isSameJsonAs(expectedJsonPayload));
     }
 
@@ -108,8 +108,8 @@ public class HttpRequestFactoryTest {
         assertThat(addPageUnderAncestorRequest.getURI().toString(), is(CONFLUENCE_REST_API_ENDPOINT + "/content"));
         assertThat(addPageUnderAncestorRequest.getFirstHeader("Content-Type").getValue(), is(APPLICATION_JSON_UTF8));
 
-        String jsonPayload = InputStreamUtils.inputStreamAsString(addPageUnderAncestorRequest.getEntity().getContent(), UTF_8);
-        String expectedJsonPayload = InputStreamUtils.fileContent(Paths.get(CLASS_LOCATION, "add-page-request-without-version-message.json").toString(), UTF_8);
+        String jsonPayload = IoUtils.inputStreamAsString(addPageUnderAncestorRequest.getEntity().getContent(), UTF_8);
+        String expectedJsonPayload = IoUtils.fileContent(Paths.get(CLASS_LOCATION, "add-page-request-without-version-message.json").toString(), UTF_8);
         assertThat(jsonPayload, SameJsonAsMatcher.isSameJsonAs(expectedJsonPayload));
     }
 
@@ -151,8 +151,8 @@ public class HttpRequestFactoryTest {
         assertThat(updatePageRequest.getURI().toString(), is(CONFLUENCE_REST_API_ENDPOINT + "/content/" + contentId));
         assertThat(updatePageRequest.getFirstHeader("Content-Type").getValue(), is(APPLICATION_JSON_UTF8));
 
-        String jsonPayload = InputStreamUtils.inputStreamAsString(updatePageRequest.getEntity().getContent(), UTF_8);
-        String expectedJsonPayload = InputStreamUtils.fileContent(Paths.get(CLASS_LOCATION, "update-page-request-with-ancestor-id.json").toString(), UTF_8);
+        String jsonPayload = IoUtils.inputStreamAsString(updatePageRequest.getEntity().getContent(), UTF_8);
+        String expectedJsonPayload = IoUtils.fileContent(Paths.get(CLASS_LOCATION, "update-page-request-with-ancestor-id.json").toString(), UTF_8);
         assertThat(jsonPayload, SameJsonAsMatcher.isSameJsonAs(expectedJsonPayload));
     }
 
@@ -174,8 +174,8 @@ public class HttpRequestFactoryTest {
         assertThat(updatePageRequest.getURI().toString(), is(CONFLUENCE_REST_API_ENDPOINT + "/content/" + contentId));
         assertThat(updatePageRequest.getFirstHeader("Content-Type").getValue(), is(APPLICATION_JSON_UTF8));
 
-        String jsonPayload = InputStreamUtils.inputStreamAsString(updatePageRequest.getEntity().getContent(), UTF_8);
-        String expectedJsonPayload = InputStreamUtils.fileContent(Paths.get(CLASS_LOCATION, "update-page-request-without-ancestor-id.json").toString(), UTF_8);
+        String jsonPayload = IoUtils.inputStreamAsString(updatePageRequest.getEntity().getContent(), UTF_8);
+        String expectedJsonPayload = IoUtils.fileContent(Paths.get(CLASS_LOCATION, "update-page-request-without-ancestor-id.json").toString(), UTF_8);
         assertThat(jsonPayload, SameJsonAsMatcher.isSameJsonAs(expectedJsonPayload));
     }
 
@@ -610,8 +610,8 @@ public class HttpRequestFactoryTest {
         assertThat(setPropertyByKeyRequest.getURI().toString(), is(CONFLUENCE_REST_API_ENDPOINT + "/content/" + contentId + "/property"));
         assertThat(setPropertyByKeyRequest.getFirstHeader("Content-Type").getValue(), is(APPLICATION_JSON_UTF8));
 
-        String jsonPayload = InputStreamUtils.inputStreamAsString(setPropertyByKeyRequest.getEntity().getContent(), UTF_8);
-        String expectedJsonPayload = InputStreamUtils.fileContent(Paths.get(CLASS_LOCATION, "set-property-by-key-request-payload.json").toString(), UTF_8);
+        String jsonPayload = IoUtils.inputStreamAsString(setPropertyByKeyRequest.getEntity().getContent(), UTF_8);
+        String expectedJsonPayload = IoUtils.fileContent(Paths.get(CLASS_LOCATION, "set-property-by-key-request-payload.json").toString(), UTF_8);
         assertThat(jsonPayload, SameJsonAsMatcher.isSameJsonAs(expectedJsonPayload));
     }
 
