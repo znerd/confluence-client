@@ -16,6 +16,10 @@
 
 package org.znerd.confluence.client.http;
 
+import org.znerd.confluence.client.utils.AssertUtils;
+
+import static org.apache.commons.lang.StringUtils.isNotBlank;
+
 /**
  * @author Alain Sahli
  */
@@ -27,6 +31,8 @@ public class ConfluenceAttachment {
     private final int version;
 
     public ConfluenceAttachment(String id, String title, String relativeDownloadLink, int version) {
+        AssertUtils.assertMandatoryParameter(isNotBlank(id), "id");
+
         this.id = id;
         this.title = title;
         this.relativeDownloadLink = relativeDownloadLink;
@@ -51,15 +57,25 @@ public class ConfluenceAttachment {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         ConfluenceAttachment that = (ConfluenceAttachment) o;
 
-        if (this.version != that.version) return false;
-        if (!this.id.equals(that.id)) return false;
+        if (this.version != that.version) {
+            return false;
+        }
+        if (!this.id.equals(that.id)) {
+            return false;
+        }
         //noinspection SimplifiableIfStatement
-        if (!this.title.equals(that.title)) return false;
+        if (!this.title.equals(that.title)) {
+            return false;
+        }
         return this.relativeDownloadLink.equals(that.relativeDownloadLink);
 
     }
