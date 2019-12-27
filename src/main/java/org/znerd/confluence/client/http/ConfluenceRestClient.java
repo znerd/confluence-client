@@ -177,9 +177,9 @@ public class ConfluenceRestClient implements ConfluenceClient {
                 throw new MultipleResultsException();
             }
 
-            ConfluenceAttachment attachmentId = extractConfluenceAttachment(jsonNode.withArray("results").elements().next());
+            ConfluenceAttachment attachment = extractConfluenceAttachment(jsonNode.withArray("results").elements().next());
 
-            return attachmentId;
+            return attachment;
         });
     }
 
