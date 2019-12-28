@@ -66,6 +66,7 @@ public class ConfluencePublisher {
         this.versionMessage = versionMessage;
     }
 
+    // TODO: Return ConfluencePublishResult object
     public void publish() {
         AssertUtils.assertMandatoryParameter(isNotBlank(this.metadata.getSpaceKey()), "spaceKey");
         AssertUtils.assertMandatoryParameter(isNotBlank(this.metadata.getAncestorId()), "ancestorId");
