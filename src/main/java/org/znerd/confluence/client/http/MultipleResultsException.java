@@ -16,9 +16,6 @@
 
 package org.znerd.confluence.client.http;
 
-/**
- * @author Alain Sahli
- */
 @SuppressWarnings("WeakerAccess")
 public class MultipleResultsException extends RuntimeException {
 

@@ -18,10 +18,6 @@ package org.znerd.confluence.client.http.payloads;
 
 import org.znerd.confluence.client.support.RuntimeUse;
 
-/**
- * @author Alain Sahli
- * @author Christian Stettler
- */
 public class PropertyPayload {
 
     private String key;

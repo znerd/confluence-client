@@ -27,11 +27,6 @@ import java.nio.charset.Charset;
 
 import static java.nio.charset.Charset.defaultCharset;
 
-/**
- * @author Alain Sahli
- * @author Christian Stettler
- * @author Laurent Verbruggen
- */
 @SuppressWarnings("WeakerAccess")
 public class RequestFailedException extends RuntimeException {
 

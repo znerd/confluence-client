@@ -16,9 +16,6 @@
 
 package org.znerd.confluence.client;
 
-/**
- * @author Laurent Verbruggen
- */
 public enum PublishingStrategy {
     APPEND_TO_ANCESTOR(true, false, true),
     APPEND_TO_ANCESTOR_KEEP_CHILDREN(true, false, false),

@@ -25,9 +25,6 @@ import java.util.Map;
 
 import static java.util.Collections.emptyList;
 
-/**
- * @author Alain Sahli
- */
 public class ConfluencePageMetadata {
 
     private String                       title;

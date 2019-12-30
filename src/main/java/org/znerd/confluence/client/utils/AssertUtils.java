@@ -16,9 +16,6 @@
 
 package org.znerd.confluence.client.utils;
 
-/**
- * @author Alain Sahli
- */
 public final class AssertUtils {
 
     private AssertUtils() {

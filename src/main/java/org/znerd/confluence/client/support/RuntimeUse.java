@@ -23,9 +23,6 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
-/**
- * @author Alain Sahli
- */
 @Retention(SOURCE)
 @Target({ TYPE, METHOD })
 public @interface RuntimeUse {

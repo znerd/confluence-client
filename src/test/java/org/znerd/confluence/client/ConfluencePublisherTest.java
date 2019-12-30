@@ -63,10 +63,6 @@ import static org.znerd.confluence.client.ConfluencePublisher.INITIAL_PAGE_VERSI
 import static org.znerd.confluence.client.PublishingStrategy.APPEND_TO_ANCESTOR;
 import static org.znerd.confluence.client.PublishingStrategy.REPLACE_ANCESTOR;
 
-/**
- * @author Alain Sahli
- * @author Christian Stettler
- */
 public class ConfluencePublisherTest {
 
     private static final String TEST_RESOURCES                      = "src/test/resources/org/znerd/confluence/client";

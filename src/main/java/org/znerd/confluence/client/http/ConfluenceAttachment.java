@@ -20,9 +20,6 @@ import org.znerd.confluence.client.utils.AssertUtils;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
-/**
- * @author Alain Sahli
- */
 public class ConfluenceAttachment {
 
     private final String id;

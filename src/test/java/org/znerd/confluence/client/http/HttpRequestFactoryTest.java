@@ -38,10 +38,6 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.rules.ExpectedException.none;
 
-/**
- * @author Alain Sahli
- * @author Christian Stettler
- */
 public class HttpRequestFactoryTest {
 
     private static final String CLASS_LOCATION               = Paths.get("src", "test", "resources", "org", "znerd", "confluence", "client", "http").toString();

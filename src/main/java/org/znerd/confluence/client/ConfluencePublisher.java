@@ -41,10 +41,6 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
-/**
- * @author Alain Sahli
- * @author Christian Stettler
- */
 public class ConfluencePublisher {
 
     static final String CONTENT_HASH_PROPERTY_KEY = "content-hash";

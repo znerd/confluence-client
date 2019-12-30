@@ -56,10 +56,6 @@ import static org.apache.http.HttpHeaders.PROXY_AUTHORIZATION;
 import static org.apache.http.client.config.CookieSpecs.STANDARD;
 import static org.znerd.confluence.client.utils.AssertUtils.assertNotNull;
 
-/**
- * @author Alain Sahli
- * @author Christian Stettler
- */
 public class ConfluenceRestClient implements ConfluenceClient {
     private final CloseableHttpClient httpClient;
     private final String              username;

@@ -21,9 +21,6 @@ import org.znerd.confluence.client.support.RuntimeUse;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Alain Sahli
- */
 public class ConfluencePublisherMetadata {
 
     private String                       spaceKey;

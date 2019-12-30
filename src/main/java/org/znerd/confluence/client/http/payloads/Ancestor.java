@@ -18,9 +18,6 @@ package org.znerd.confluence.client.http.payloads;
 
 import org.znerd.confluence.client.support.RuntimeUse;
 
-/**
- * @author Alain Sahli
- */
 public class Ancestor {
 
     private String id;

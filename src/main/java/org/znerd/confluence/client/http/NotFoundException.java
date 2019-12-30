@@ -16,9 +16,6 @@
 
 package org.znerd.confluence.client.http;
 
-/**
- * @author Alain Sahli
- */
 public class NotFoundException extends RuntimeException {
 
 }

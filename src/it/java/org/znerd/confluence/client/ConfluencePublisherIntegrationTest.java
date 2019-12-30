@@ -40,10 +40,6 @@ import static org.junit.Assert.fail;
 import static org.znerd.confluence.client.PublishingStrategy.APPEND_TO_ANCESTOR;
 import static org.znerd.confluence.client.PublishingStrategy.REPLACE_ANCESTOR;
 
-/**
- * @author Alain Sahli
- * @author Christian Stettler
- */
 public class ConfluencePublisherIntegrationTest {
 
     private static final String ANCESTOR_ID = "327706";

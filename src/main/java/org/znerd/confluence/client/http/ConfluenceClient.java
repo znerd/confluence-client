@@ -19,9 +19,6 @@ package org.znerd.confluence.client.http;
 import java.io.InputStream;
 import java.util.List;
 
-/**
- * @author Alain Sahli
- */
 public interface ConfluenceClient {
 
     String addPageUnderAncestor(String spaceKey, String ancestorId, String title, String content, String versionMessage);

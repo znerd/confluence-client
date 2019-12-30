@@ -52,9 +52,6 @@ import static org.apache.http.entity.ContentType.APPLICATION_OCTET_STREAM;
 import static org.znerd.confluence.client.http.HttpRequestFactory.PagePayloadBuilder.pagePayloadBuilder;
 import static org.znerd.confluence.client.utils.AssertUtils.assertMandatoryParameter;
 
-/**
- * @author Alain Sahli
- */
 class HttpRequestFactory {
     private final static Header APPLICATION_JSON_UTF8_HEADER = new BasicHeader("Content-Type", "application/json;charset=utf-8");
     private static final String REST_API_CONTEXT             = "/rest/api";

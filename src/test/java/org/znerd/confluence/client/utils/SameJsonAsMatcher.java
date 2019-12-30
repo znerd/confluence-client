@@ -23,9 +23,6 @@ import org.hamcrest.Description;
 
 import java.io.IOException;
 
-/**
- * @author Alain Sahli
- */
 public class SameJsonAsMatcher extends BaseMatcher<String> {
 
     private final ObjectMapper objectMapper = new ObjectMapper();

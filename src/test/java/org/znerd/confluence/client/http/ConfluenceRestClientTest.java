@@ -55,10 +55,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * @author Alain Sahli
- * @author Christian Stettler
- */
 public class ConfluenceRestClientTest {
 
     private static final String CONFLUENCE_ROOT_URL = "http://confluence.com";
