@@ -26,8 +26,8 @@ import java.util.List;
  */
 public class ConfluencePublisherMetadata {
 
-    private String spaceKey;
-    private String ancestorId;
+    private String                       spaceKey;
+    private String                       ancestorId;
     private List<ConfluencePageMetadata> pages = new ArrayList<>();
 
     public String getSpaceKey() {
@@ -56,5 +56,4 @@ public class ConfluencePublisherMetadata {
     public void setPages(List<ConfluencePageMetadata> pages) {
         this.pages = pages;
     }
-
 }

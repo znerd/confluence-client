@@ -23,7 +23,7 @@ import org.znerd.confluence.client.support.RuntimeUse;
  */
 public class Version {
 
-    private int number;
+    private int    number;
     private String message;
 
     @RuntimeUse

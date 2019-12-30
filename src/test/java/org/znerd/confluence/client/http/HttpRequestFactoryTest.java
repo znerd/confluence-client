@@ -44,9 +44,9 @@ import static org.junit.rules.ExpectedException.none;
  */
 public class HttpRequestFactoryTest {
 
-    private static final String CLASS_LOCATION = Paths.get("src", "test", "resources", "org", "znerd", "confluence", "client", "http").toString();
-    private static final String APPLICATION_JSON_UTF8 = "application/json;charset=utf-8";
-    private static final String ROOT_CONFLUENCE_URL = "http://confluence.com";
+    private static final String CLASS_LOCATION               = Paths.get("src", "test", "resources", "org", "znerd", "confluence", "client", "http").toString();
+    private static final String APPLICATION_JSON_UTF8        = "application/json;charset=utf-8";
+    private static final String ROOT_CONFLUENCE_URL          = "http://confluence.com";
     private static final String CONFLUENCE_REST_API_ENDPOINT = ROOT_CONFLUENCE_URL + "/rest/api";
 
     @Rule
@@ -360,7 +360,7 @@ public class HttpRequestFactoryTest {
         // assert
         assertThat(getPageByTitleRequest.getMethod(), is("GET"));
         assertThat(getPageByTitleRequest.getURI().toString(),
-                is(CONFLUENCE_REST_API_ENDPOINT + "/content?spaceKey=" + spaceKey + "&title=" + "Some+page"));
+            is(CONFLUENCE_REST_API_ENDPOINT + "/content?spaceKey=" + spaceKey + "&title=" + "Some+page"));
     }
 
     @Test
@@ -640,5 +640,4 @@ public class HttpRequestFactoryTest {
         // assert
         assertThat(deletePropertyByKeyRequest.getURI().toString(), is(CONFLUENCE_REST_API_ENDPOINT + "/content/" + contentId + "/property/" + key));
     }
-
 }

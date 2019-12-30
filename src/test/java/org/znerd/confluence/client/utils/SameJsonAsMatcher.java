@@ -29,7 +29,7 @@ import java.io.IOException;
 public class SameJsonAsMatcher extends BaseMatcher<String> {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private JsonNode expectedJson;
+    private       JsonNode     expectedJson;
 
     private SameJsonAsMatcher(String expectedJson) {
         try {
@@ -63,5 +63,4 @@ public class SameJsonAsMatcher extends BaseMatcher<String> {
     public static SameJsonAsMatcher isSameJsonAs(String expectedJson) {
         return new SameJsonAsMatcher(expectedJson);
     }
-
 }

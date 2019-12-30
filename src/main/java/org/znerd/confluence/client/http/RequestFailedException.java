@@ -37,17 +37,17 @@ public class RequestFailedException extends RuntimeException {
 
     RequestFailedException(HttpRequest request, HttpResponse response) {
         super("" +
-                response.getStatusLine().getStatusCode() +
-                " " +
-                response.getStatusLine().getReasonPhrase() +
-                " " +
-                request.getRequestLine().getMethod() +
-                " " +
-                request.getRequestLine().getUri() +
-                "\n" +
-                "request: '" + failedRequestContent(request) + "'" +
-                "\n" +
-                "response: '" + failedResponseContent(response) + "'"
+            response.getStatusLine().getStatusCode() +
+            " " +
+            response.getStatusLine().getReasonPhrase() +
+            " " +
+            request.getRequestLine().getMethod() +
+            " " +
+            request.getRequestLine().getUri() +
+            "\n" +
+            "request: '" + failedRequestContent(request) + "'" +
+            "\n" +
+            "response: '" + failedResponseContent(response) + "'"
         );
     }
 

@@ -51,5 +51,4 @@ public interface ConfluenceClient {
     String getPropertyByKey(String contentId, String key);
 
     void deletePropertyByKey(String contentId, String key);
-
 }

@@ -16,7 +16,6 @@
 
 package org.znerd.confluence.client;
 
-
 import io.restassured.specification.RequestSpecification;
 import org.junit.Test;
 import org.znerd.confluence.client.http.ConfluenceRestClient;
@@ -67,14 +66,14 @@ public class ConfluencePublisherIntegrationTest {
 
         // assert
         givenAuthenticatedAsPublisher()
-                .when().get(childPages())
-                .then().body("results.title", hasItem(title));
+            .when().get(childPages())
+            .then().body("results.title", hasItem(title));
 
         givenAuthenticatedAsPublisher()
-                .when().get(attachmentsOf(pageIdBy(title)))
-                .then()
-                .body("results", hasSize(2))
-                .body("results.title", hasItems("attachmentOne.txt", "attachmentTwo.txt"));
+            .when().get(attachmentsOf(pageIdBy(title)))
+            .then()
+            .body("results", hasSize(2))
+            .body("results.title", hasItems("attachmentOne.txt", "attachmentTwo.txt"));
     }
 
     @Test
@@ -94,14 +93,14 @@ public class ConfluencePublisherIntegrationTest {
 
         // assert
         givenAuthenticatedAsPublisher()
-                .when().get(rootPage())
-                .then().body("title", is(title));
+            .when().get(rootPage())
+            .then().body("title", is(title));
 
         givenAuthenticatedAsPublisher()
-                .when().get(rootPageAttachments())
-                .then()
-                .body("results", hasSize(2))
-                .body("results.title", hasItems("attachmentOne.txt", "attachmentTwo.txt"));
+            .when().get(rootPageAttachments())
+            .then()
+            .body("results", hasSize(2))
+            .body("results.title", hasItems("attachmentOne.txt", "attachmentTwo.txt"));
     }
 
     @Test
@@ -122,10 +121,10 @@ public class ConfluencePublisherIntegrationTest {
 
         // assert
         givenAuthenticatedAsPublisher()
-                .when().get(rootPageAttachments())
-                .then()
-                .body("results", hasSize(2))
-                .body("results.title", hasItems("attachmentOne.txt", "attachmentTwo.txt"));
+            .when().get(rootPageAttachments())
+            .then()
+            .body("results", hasSize(2))
+            .body("results.title", hasItems("attachmentOne.txt", "attachmentTwo.txt"));
     }
 
     @Test
@@ -145,37 +144,36 @@ public class ConfluencePublisherIntegrationTest {
 
         // assert
         givenAuthenticatedAsPublisher()
-                .when().get(rootPage())
-                .then().body("title", is(title));
+            .when().get(rootPage())
+            .then().body("title", is(title));
 
         givenAuthenticatedAsPublisher()
-                .when().get(rootPageAttachments())
-                .then()
-                .body("results", hasSize(2))
-                .body("results.title", hasItems("attachmentOne.txt", "attachmentTwo.txt"));
+            .when().get(rootPageAttachments())
+            .then()
+            .body("results", hasSize(2))
+            .body("results.title", hasItems("attachmentOne.txt", "attachmentTwo.txt"));
 
         // act
         givenAuthenticatedAsPublisher()
-                .when().delete(attachment(firstAttachmentId()));
+            .when().delete(attachment(firstAttachmentId()));
 
         // assert
         givenAuthenticatedAsPublisher()
-                .when().get(rootPageAttachments())
-                .then()
-                .body("results", hasSize(1))
-                .body("results.title", anyOf(hasItem("attachmentTwo.txt"), hasItem("attachmentOne.txt")));
+            .when().get(rootPageAttachments())
+            .then()
+            .body("results", hasSize(1))
+            .body("results.title", anyOf(hasItem("attachmentTwo.txt"), hasItem("attachmentOne.txt")));
 
         // act
         confluencePublisher.publish();
 
         // assert
         givenAuthenticatedAsPublisher()
-                .when().get(rootPageAttachments())
-                .then()
-                .body("results", hasSize(2))
-                .body("results.title", hasItems("attachmentOne.txt", "attachmentTwo.txt"));
+            .when().get(rootPageAttachments())
+            .then()
+            .body("results", hasSize(2))
+            .body("results.title", hasItems("attachmentOne.txt", "attachmentTwo.txt"));
     }
-
 
     @Test
     public void publish_sameContentPublishedMultipleTimes_doesNotProduceMultipleVersions() {
@@ -191,8 +189,8 @@ public class ConfluencePublisherIntegrationTest {
 
         // assert
         givenAuthenticatedAsPublisher()
-                .when().get(pageVersionOf(pageIdBy(title)))
-                .then().body("version.number", is(1));
+            .when().get(pageVersionOf(pageIdBy(title)))
+            .then().body("version.number", is(1));
     }
 
     @Test
@@ -219,8 +217,8 @@ public class ConfluencePublisherIntegrationTest {
 
         // assert
         givenAuthenticatedAsPublisher()
-                .when().get(propertyValueOf(pageIdBy(title), "content-hash"))
-                .then().body("value", is(notNullValue()));
+            .when().get(propertyValueOf(pageIdBy(title), "content-hash"))
+            .then().body("value", is(notNullValue()));
     }
 
     private static String uniqueTitle(String title) {
@@ -283,14 +281,14 @@ public class ConfluencePublisherIntegrationTest {
 
     private String firstAttachmentId() {
         return givenAuthenticatedAsPublisher()
-                .when().get(rootPageAttachments())
-                .path("results[0].id");
+            .when().get(rootPageAttachments())
+            .path("results[0].id");
     }
 
     private static String pageIdBy(String title) {
         return givenAuthenticatedAsPublisher()
-                .when().get(childPages())
-                .path("results.find({it.title == '" + title + "'}).id");
+            .when().get(childPages())
+            .path("results.find({it.title == '" + title + "'}).id");
     }
 
     private static ConfluencePublisher confluencePublisher(ConfluencePublisherMetadata confluencePublisherMetadata, PublishingStrategy publishingStrategy) {
@@ -304,5 +302,4 @@ public class ConfluencePublisherIntegrationTest {
     private static ConfluenceRestClient confluenceRestClient() {
         return new ConfluenceRestClient("http://localhost:8090", false, "confluence-publisher-it", "1234");
     }
-
 }

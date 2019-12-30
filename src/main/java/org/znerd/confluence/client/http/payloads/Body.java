@@ -33,5 +33,4 @@ public class Body {
     public void setStorage(Storage storage) {
         this.storage = storage;
     }
-
 }

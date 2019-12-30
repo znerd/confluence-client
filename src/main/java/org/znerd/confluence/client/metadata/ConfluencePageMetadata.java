@@ -30,10 +30,10 @@ import static java.util.Collections.emptyList;
  */
 public class ConfluencePageMetadata {
 
-    private String title;
-    private String contentFilePath;
-    private List<ConfluencePageMetadata> children = new ArrayList<>();
-    private Map<String, String> attachments = new HashMap<>();
+    private String                       title;
+    private String                       contentFilePath;
+    private List<ConfluencePageMetadata> children    = new ArrayList<>();
+    private Map<String, String>          attachments = new HashMap<>();
 
     public String getTitle() {
         return this.title;
@@ -74,5 +74,4 @@ public class ConfluencePageMetadata {
     public void setAttachments(Map<String, String> attachments) {
         this.attachments = attachments;
     }
-
 }

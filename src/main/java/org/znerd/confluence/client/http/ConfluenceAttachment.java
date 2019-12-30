@@ -28,7 +28,7 @@ public class ConfluenceAttachment {
     private final String id;
     private final String title;
     private final String relativeDownloadLink;
-    private final int version;
+    private final int    version;
 
     public ConfluenceAttachment(String id, String title, String relativeDownloadLink, int version) {
         AssertUtils.assertMandatoryParameter(isNotBlank(id), "id");
@@ -77,7 +77,6 @@ public class ConfluenceAttachment {
             return false;
         }
         return this.relativeDownloadLink.equals(that.relativeDownloadLink);
-
     }
 
     @Override
@@ -92,11 +91,10 @@ public class ConfluenceAttachment {
     @Override
     public String toString() {
         return "ConfluenceAttachment{" +
-                "id='" + this.id + '\'' +
-                ", title='" + this.title + '\'' +
-                ", relativeDownloadLink='" + this.relativeDownloadLink + '\'' +
-                ", version=" + this.version +
-                '}';
+            "id='" + this.id + '\'' +
+            ", title='" + this.title + '\'' +
+            ", relativeDownloadLink='" + this.relativeDownloadLink + '\'' +
+            ", version=" + this.version +
+            '}';
     }
-
 }

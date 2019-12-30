@@ -38,5 +38,4 @@ public class Storage {
     public void setValue(String value) {
         this.value = value;
     }
-
 }

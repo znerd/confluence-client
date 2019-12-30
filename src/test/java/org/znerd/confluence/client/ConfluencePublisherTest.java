@@ -69,7 +69,7 @@ import static org.znerd.confluence.client.PublishingStrategy.REPLACE_ANCESTOR;
  */
 public class ConfluencePublisherTest {
 
-    private static final String TEST_RESOURCES = "src/test/resources/org/znerd/confluence/client";
+    private static final String TEST_RESOURCES                      = "src/test/resources/org/znerd/confluence/client";
     private static final String SOME_CONFLUENCE_CONTENT_SHA256_HASH = "7a901829ba6a0b6f7f084ae4313bdb5d83bc2c4ea21b452ba7073c0b0c60faae";
 
     @Rule
@@ -407,8 +407,8 @@ public class ConfluencePublisherTest {
         when(confluenceRestClientMock.getPropertyByKey("72189173", CONTENT_HASH_PROPERTY_KEY)).thenReturn(SOME_CONFLUENCE_CONTENT_SHA256_HASH);
 
         when(confluenceRestClientMock.getAttachments("72189173")).thenReturn(asList(
-                new ConfluenceAttachment("att1", "attachmentOne.txt", "", 1),
-                new ConfluenceAttachment("att2", "attachmentTwo.txt", "", 1)
+            new ConfluenceAttachment("att1", "attachmentOne.txt", "", 1),
+            new ConfluenceAttachment("att2", "attachmentTwo.txt", "", 1)
         ));
 
         ConfluencePublisher confluencePublisher = confluencePublisher("one-page-ancestor-id", REPLACE_ANCESTOR, confluenceRestClientMock, null, null);
@@ -432,9 +432,9 @@ public class ConfluencePublisherTest {
         when(confluenceRestClientMock.getPropertyByKey("72189173", CONTENT_HASH_PROPERTY_KEY)).thenReturn(SOME_CONFLUENCE_CONTENT_SHA256_HASH);
 
         when(confluenceRestClientMock.getAttachments("72189173")).thenReturn(asList(
-                new ConfluenceAttachment("att1", "attachmentOne.txt", "", 1),
-                new ConfluenceAttachment("att2", "attachmentTwo.txt", "", 1),
-                new ConfluenceAttachment("att3", "attachmentThree.txt", "", 1)
+            new ConfluenceAttachment("att1", "attachmentOne.txt", "", 1),
+            new ConfluenceAttachment("att2", "attachmentTwo.txt", "", 1),
+            new ConfluenceAttachment("att3", "attachmentThree.txt", "", 1)
         ));
 
         when(confluenceRestClientMock.getAttachmentByFileName("72189173", "attachmentOne.txt")).thenReturn(new ConfluenceAttachment("att1", "attachmentOne.txt", "", 1));
@@ -571,12 +571,11 @@ public class ConfluencePublisherTest {
         pages.forEach((page) -> {
             page.setContentFilePath(contentRoot.resolve(page.getContentFilePath()).toString());
             page.setAttachments(page.getAttachments().entrySet().stream().collect(toMap(
-                    (entry) -> entry.getValue(),
-                    (entry) -> contentRoot.resolve(entry.getKey()).toString()
+                (entry) -> entry.getValue(),
+                (entry) -> contentRoot.resolve(entry.getKey()).toString()
             )));
 
             resolveAbsoluteContentFileAndAttachmentsPath(page.getChildren(), contentRoot);
         });
     }
-
 }

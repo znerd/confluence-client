@@ -24,7 +24,7 @@ public class ConfluencePage {
     private final String contentId;
     private final String title;
     private final String content;
-    private final int version;
+    private final int    version;
 
     public ConfluencePage(String contentId, String title, int version) {
         this(contentId, title, null, version);
@@ -55,17 +55,21 @@ public class ConfluencePage {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         ConfluencePage that = (ConfluencePage) o;
 
-        if (this.version != that.version) return false;
-        if (!this.contentId.equals(that.contentId)) return false;
+        if (this.version != that.version)
+            return false;
+        if (!this.contentId.equals(that.contentId))
+            return false;
         //noinspection SimplifiableIfStatement
-        if (!this.title.equals(that.title)) return false;
+        if (!this.title.equals(that.title))
+            return false;
         return this.content != null ? this.content.equals(that.content) : that.content == null;
-
     }
 
     @Override
@@ -80,11 +84,10 @@ public class ConfluencePage {
     @Override
     public String toString() {
         return "ConfluencePage{" +
-                "contentId='" + this.contentId + '\'' +
-                ", title='" + this.title + '\'' +
-                ", content='" + this.content + '\'' +
-                ", version=" + this.version +
-                '}';
+            "contentId='" + this.contentId + '\'' +
+            ", title='" + this.title + '\'' +
+            ", content='" + this.content + '\'' +
+            ", version=" + this.version +
+            '}';
     }
-
 }

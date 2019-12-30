@@ -26,11 +26,11 @@ import java.util.List;
  */
 public class PagePayload {
 
-    private String title;
-    private Space space;
-    private Body body;
+    private       String         title;
+    private       Space          space;
+    private       Body           body;
     private final List<Ancestor> ancestors = new ArrayList<>();
-    private Version version;
+    private       Version        version;
 
     public void addAncestor(Ancestor ancestor) {
         this.ancestors.add(ancestor);
@@ -81,5 +81,4 @@ public class PagePayload {
     public void setVersion(Version version) {
         this.version = version;
     }
-
 }

@@ -27,6 +27,6 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
  * @author Alain Sahli
  */
 @Retention(SOURCE)
-@Target({TYPE, METHOD})
+@Target({ TYPE, METHOD })
 public @interface RuntimeUse {
 }

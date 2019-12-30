@@ -472,11 +472,11 @@ public class ConfluenceRestClientTest {
         this.expectedException.expect(RuntimeException.class);
         this.expectedException.expectMessage("404 reason POST http://confluence.com/rest/api/content\n" +
             "request: '{\"title\":\"Hello\"," +
-                "\"space\":{\"key\":\"~personalSpace\"}," +
-                "\"body\":{\"storage\":{\"value\":\"Content\",\"representation\":\"storage\"}}," +
-                "\"ancestors\":[{\"id\":\"123\"}]," +
-                "\"version\":{\"number\":1,\"message\":\"Version Message\"}," +
-                "\"type\":\"page\"}'\n" +
+            "\"space\":{\"key\":\"~personalSpace\"}," +
+            "\"body\":{\"storage\":{\"value\":\"Content\",\"representation\":\"storage\"}}," +
+            "\"ancestors\":[{\"id\":\"123\"}]," +
+            "\"version\":{\"number\":1,\"message\":\"Version Message\"}," +
+            "\"type\":\"page\"}'\n" +
             "response: '{\"some\": \"json\"}'");
 
         // act
@@ -485,11 +485,11 @@ public class ConfluenceRestClientTest {
 
     private String generateJsonAttachmentResults(int numberOfAttachment) {
         return IntStream.range(1, numberOfAttachment + 1)
-                .boxed()
-                .map(attachmentNumber -> "{\"id\": \"" + attachmentNumber + "\", \"title\": \"Attachment-" + attachmentNumber +
-                        ".txt\", \"_links\": {\"download\": \"/download/Attachment-" + attachmentNumber +
-                        ".txt\"}, \"version\": {\"number\": 1}}")
-                .collect(Collectors.joining(",\n"));
+            .boxed()
+            .map(attachmentNumber -> "{\"id\": \"" + attachmentNumber + "\", \"title\": \"Attachment-" + attachmentNumber +
+                ".txt\", \"_links\": {\"download\": \"/download/Attachment-" + attachmentNumber +
+                ".txt\"}, \"version\": {\"number\": 1}}")
+            .collect(Collectors.joining(",\n"));
     }
 
     private static CloseableHttpClient recordHttpClientForSingleResponseWithContentAndStatusCode(String contentPayload, int statusCode) throws IOException {
@@ -516,11 +516,11 @@ public class ConfluenceRestClientTest {
 
         List<HttpEntity> httpEntities = contentPayloads.stream().map(ConfluenceRestClientTest::recordHttpEntityForContent).collect(toList());
         when(httpResponseMock.getEntity())
-                .thenReturn(httpEntities.get(0), httpEntities.subList(1, httpEntities.size()).toArray(new HttpEntity[httpEntities.size() - 1]));
+            .thenReturn(httpEntities.get(0), httpEntities.subList(1, httpEntities.size()).toArray(new HttpEntity[httpEntities.size() - 1]));
 
         List<StatusLine> statusLines = statusCodes.stream().map((statusCode) -> recordStatusLine(statusCode, null)).collect(toList());
         when(httpResponseMock.getStatusLine())
-                .thenReturn(statusLines.get(0), statusLines.subList(1, statusLines.size()).toArray(new StatusLine[statusLines.size() - 1]));
+            .thenReturn(statusLines.get(0), statusLines.subList(1, statusLines.size()).toArray(new StatusLine[statusLines.size() - 1]));
 
         CloseableHttpClient httpClientMock = anyCloseableHttpClient();
         when(httpClientMock.execute(any(HttpRequestBase.class))).thenReturn(httpResponseMock);
@@ -554,14 +554,13 @@ public class ConfluenceRestClientTest {
 
     private static String generateJsonPageResults(int numberOfPages) {
         return IntStream.range(1, numberOfPages + 1)
-                .boxed()
-                .map(pageNumber -> "{" +
-                        "\"id\": \"" + pageNumber + "\", " +
-                        "\"title\": \"Page " + pageNumber + "\", " +
-                        "\"version\": {\"number\": 1}," +
-                        "\"ancestors\": [{\"id\": \"ancestor\"}]" +
-                        "}")
-                .collect(Collectors.joining(",\n"));
+            .boxed()
+            .map(pageNumber -> "{" +
+                "\"id\": \"" + pageNumber + "\", " +
+                "\"title\": \"Page " + pageNumber + "\", " +
+                "\"version\": {\"number\": 1}," +
+                "\"ancestors\": [{\"id\": \"ancestor\"}]" +
+                "}")
+            .collect(Collectors.joining(",\n"));
     }
-
 }
