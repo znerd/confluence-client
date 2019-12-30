@@ -56,12 +56,11 @@ import static org.znerd.confluence.client.utils.AssertUtils.assertMandatoryParam
  * @author Alain Sahli
  */
 class HttpRequestFactory {
-
     private final static Header APPLICATION_JSON_UTF8_HEADER = new BasicHeader("Content-Type", "application/json;charset=utf-8");
-    private static final String REST_API_CONTEXT = "/rest/api";
-    private static final int INITAL_VERSION = 1;
-    private final String rootConfluenceUrl;
-    private final String confluenceRestApiEndpoint;
+    private static final String REST_API_CONTEXT             = "/rest/api";
+    private static final int    INITIAL_VERSION              = 1;
+    private final        String rootConfluenceUrl;
+    private final        String confluenceRestApiEndpoint;
 
     HttpRequestFactory(String rootConfluenceUrl) {
         assertMandatoryParameter(isNotBlank(rootConfluenceUrl), "rootConfluenceUrl");
@@ -76,13 +75,13 @@ class HttpRequestFactory {
         assertMandatoryParameter(isNotBlank(title), "title");
 
         PagePayload pagePayload = pagePayloadBuilder()
-                .spaceKey(spaceKey)
-                .ancestorId(ancestorId)
-                .title(title)
-                .content(content)
-                .version(INITAL_VERSION)
-                .versionMessage(versionMessage)
-                .build();
+            .spaceKey(spaceKey)
+            .ancestorId(ancestorId)
+            .title(title)
+            .content(content)
+            .version(INITIAL_VERSION)
+            .versionMessage(versionMessage)
+            .build();
 
         return addPageHttpPost(this.confluenceRestApiEndpoint, pagePayload);
     }
@@ -92,12 +91,12 @@ class HttpRequestFactory {
         assertMandatoryParameter(isNotBlank(title), "title");
 
         PagePayload pagePayload = pagePayloadBuilder()
-                .ancestorId(ancestorId)
-                .title(title)
-                .content(content)
-                .version(newVersion)
-                .versionMessage(versionMessage)
-                .build();
+            .ancestorId(ancestorId)
+            .title(title)
+            .content(content)
+            .version(newVersion)
+            .versionMessage(versionMessage)
+            .build();
 
         HttpPut updatePageRequest = new HttpPut(this.confluenceRestApiEndpoint + "/content/" + contentId);
         updatePageRequest.setEntity(httpEntityWithJsonPayload(pagePayload));
@@ -325,15 +324,14 @@ class HttpRequestFactory {
         return multipartEntityBuilder.build();
     }
 
-
     static class PagePayloadBuilder {
 
-        private String title;
-        private String content;
-        private String spaceKey;
-        private String ancestorId;
+        private String  title;
+        private String  content;
+        private String  spaceKey;
+        private String  ancestorId;
         private Integer version;
-        private String versionMessage;
+        private String  versionMessage;
 
         public PagePayloadBuilder title(String title) {
             this.title = title;
@@ -410,5 +408,4 @@ class HttpRequestFactory {
             return new PagePayloadBuilder();
         }
     }
-
 }
