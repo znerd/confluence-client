@@ -16,6 +16,8 @@
 
 package org.znerd.confluence.client.utils;
 
+import static org.apache.commons.lang.StringUtils.isBlank;
+
 public final class AssertUtils {
 
     private AssertUtils() {
@@ -31,6 +33,13 @@ public final class AssertUtils {
     public static <T> T assertNotNull(T parameterValue, String parameterName) {
         if (parameterValue == null) {
             throw new IllegalArgumentException(parameterName + " == null");
+        }
+        return parameterValue;
+    }
+
+    public static String assertNotBlank(final String parameterValue, final String parameterName) {
+        if (isBlank(parameterValue)) {
+            throw new IllegalArgumentException(parameterName + " is null or blank (only whitespace)");
         }
         return parameterValue;
     }

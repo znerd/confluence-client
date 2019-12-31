@@ -22,7 +22,6 @@ import org.znerd.confluence.client.http.ConfluencePage;
 import org.znerd.confluence.client.http.NotFoundException;
 import org.znerd.confluence.client.metadata.ConfluencePageMetadata;
 import org.znerd.confluence.client.metadata.ConfluencePublisherMetadata;
-import org.znerd.confluence.client.utils.AssertUtils;
 import org.znerd.confluence.client.utils.IoUtils;
 
 import java.io.FileInputStream;
@@ -40,25 +39,26 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.znerd.confluence.client.utils.AssertUtils.assertMandatoryParameter;
 
 public class ConfluencePublisher {
 
     static final String CONTENT_HASH_PROPERTY_KEY = "content-hash";
-    static final int    INITIAL_PAGE_VERSION      = 1;
+    static final int INITIAL_PAGE_VERSION = 1;
 
     private final ConfluencePublisherMetadata metadata;
-    private final PublishingStrategy          publishingStrategy;
-    private final ConfluenceClient            confluenceClient;
+    private final PublishingStrategy publishingStrategy;
+    private final ConfluenceClient confluenceClient;
     private final ConfluencePublisherListener confluencePublisherListener;
-    private final String                      versionMessage;
+    private final String versionMessage;
 
     public ConfluencePublisher(ConfluencePublisherMetadata metadata, PublishingStrategy publishingStrategy, ConfluenceClient confluenceClient) {
         this(metadata, publishingStrategy, confluenceClient, new NoOpConfluencePublisherListener(), null);
     }
 
     public ConfluencePublisher(ConfluencePublisherMetadata metadata, PublishingStrategy publishingStrategy,
-        ConfluenceClient confluenceClient, ConfluencePublisherListener confluencePublisherListener,
-        String versionMessage) {
+                               ConfluenceClient confluenceClient, ConfluencePublisherListener confluencePublisherListener,
+                               String versionMessage) {
         this.metadata = metadata;
         this.publishingStrategy = publishingStrategy;
         this.confluenceClient = confluenceClient;
@@ -66,20 +66,25 @@ public class ConfluencePublisher {
         this.versionMessage = versionMessage;
     }
 
-    // TODO: Return ConfluencePublishResult object
-    public void publish() {
-        AssertUtils.assertMandatoryParameter(isNotBlank(this.metadata.getSpaceKey()), "spaceKey");
-        AssertUtils.assertMandatoryParameter(isNotBlank(this.metadata.getAncestorId()), "ancestorId");
+    public ConfluencePublishResult publish() {
+        final String spaceKey = this.metadata.getSpaceKey();
+        final String ancestorId = this.metadata.getAncestorId();
 
+        assertMandatoryParameter(isNotBlank(spaceKey), "spaceKey");
+        assertMandatoryParameter(isNotBlank(ancestorId), "ancestorId");
+
+        final List<ConfluencePageMetadata> pages = this.metadata.getPages();
         if (this.publishingStrategy.isAppendToAncestor()) {
-            startPublishingUnderAncestorId(this.metadata.getPages(), this.metadata.getSpaceKey(), this.metadata.getAncestorId());
+            startPublishingUnderAncestorId(pages, spaceKey, ancestorId);
         } else if (this.publishingStrategy.isReplaceAncestor()) {
-            startPublishingReplacingAncestorId(singleRootPage(this.metadata), this.metadata.getSpaceKey(), this.metadata.getAncestorId());
+            startPublishingReplacingAncestorId(singleRootPage(this.metadata), spaceKey, ancestorId);
         } else {
             throw new IllegalArgumentException("Invalid publishing strategy '" + this.publishingStrategy + "'");
         }
 
         this.confluencePublisherListener.publishCompleted();
+
+        return new BasicConfluencePublishResult(confluenceClient.getRootConfluenceUrl(), spaceKey, ancestorId, pages);
     }
 
     private static ConfluencePageMetadata singleRootPage(ConfluencePublisherMetadata metadata) {
@@ -87,8 +92,8 @@ public class ConfluencePublisher {
 
         if (rootPages.size() > 1) {
             String rootPageTitles = rootPages.stream()
-                .map(page -> "'" + page.getTitle() + "'")
-                .collect(joining(", "));
+                    .map(page -> "'" + page.getTitle() + "'")
+                    .collect(joining(", "));
 
             throw new IllegalArgumentException("Multiple root pages detected: " + rootPageTitles + ", but '" + PublishingStrategy.REPLACE_ANCESTOR + "' publishing strategy only supports one single root page");
         }
@@ -129,8 +134,8 @@ public class ConfluencePublisher {
         List<ConfluencePage> childPagesOnConfluence = this.confluenceClient.getChildPages(ancestorId);
 
         List<ConfluencePage> childPagesOnConfluenceToDelete = childPagesOnConfluence.stream()
-            .filter(childPageOnConfluence -> pagesToKeep.stream().noneMatch(page -> page.getTitle().equals(childPageOnConfluence.getTitle())))
-            .collect(toList());
+                .filter(childPageOnConfluence -> pagesToKeep.stream().noneMatch(page -> page.getTitle().equals(childPageOnConfluence.getTitle())))
+                .collect(toList());
 
         childPagesOnConfluenceToDelete.forEach(pageToDelete -> {
             List<ConfluencePage> pageScheduledForDeletionChildPagesOnConfluence = this.confluenceClient.getChildPages(pageToDelete.getContentId());
@@ -144,11 +149,11 @@ public class ConfluencePublisher {
         List<ConfluenceAttachment> confluenceAttachments = this.confluenceClient.getAttachments(contentId);
 
         confluenceAttachments.stream()
-            .filter(confluenceAttachment -> attachments.keySet().stream().noneMatch(attachmentFileName -> attachmentFileName.equals(confluenceAttachment.getTitle())))
-            .forEach(confluenceAttachment -> {
-                this.confluenceClient.deletePropertyByKey(contentId, getAttachmentHashKey(confluenceAttachment.getTitle()));
-                this.confluenceClient.deleteAttachment(confluenceAttachment.getId());
-            });
+                .filter(confluenceAttachment -> attachments.keySet().stream().noneMatch(attachmentFileName -> attachmentFileName.equals(confluenceAttachment.getTitle())))
+                .forEach(confluenceAttachment -> {
+                    this.confluenceClient.deletePropertyByKey(contentId, getAttachmentHashKey(confluenceAttachment.getTitle()));
+                    this.confluenceClient.deleteAttachment(confluenceAttachment.getId());
+                });
     }
 
     private String addOrUpdatePageUnderAncestor(String spaceKey, String ancestorId, ConfluencePageMetadata page) {

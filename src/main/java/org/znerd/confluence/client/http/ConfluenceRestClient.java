@@ -57,6 +57,7 @@ import static org.apache.http.client.config.CookieSpecs.STANDARD;
 import static org.znerd.confluence.client.utils.AssertUtils.assertNotNull;
 
 public class ConfluenceRestClient implements ConfluenceClient {
+    private final String rootConfluenceUrl;
     private final CloseableHttpClient httpClient;
     private final String              username;
     private final String              password;
@@ -72,6 +73,7 @@ public class ConfluenceRestClient implements ConfluenceClient {
     }
 
     public ConfluenceRestClient(String rootConfluenceUrl, CloseableHttpClient httpClient, String username, String password) {
+        this.rootConfluenceUrl = rootConfluenceUrl;
         this.httpClient = assertNotNull(httpClient, "httpClient");
         this.username = username;
         this.password = password;
@@ -83,6 +85,11 @@ public class ConfluenceRestClient implements ConfluenceClient {
         final ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         return objectMapper;
+    }
+
+    @Override
+    public String getRootConfluenceUrl() {
+        return rootConfluenceUrl;
     }
 
     @Override
