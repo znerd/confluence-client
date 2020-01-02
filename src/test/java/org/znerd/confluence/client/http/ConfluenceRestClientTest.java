@@ -76,7 +76,7 @@ public class ConfluenceRestClientTest {
     public void instantiation_withNullHttpClient_throwsIllegalArgumentException() {
         // assert
         this.expectedException.expect(IllegalArgumentException.class);
-        this.expectedException.expectMessage("httpClient must be set");
+        this.expectedException.expectMessage("httpClient == null");
 
         // arrange + act
         new ConfluenceRestClient(CONFLUENCE_ROOT_URL, null, null, null);

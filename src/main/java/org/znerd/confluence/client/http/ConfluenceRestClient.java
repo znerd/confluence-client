@@ -57,7 +57,7 @@ import static org.apache.http.client.config.CookieSpecs.STANDARD;
 import static org.znerd.confluence.client.utils.AssertUtils.assertNotNull;
 
 public class ConfluenceRestClient implements ConfluenceClient {
-    private final String rootConfluenceUrl;
+    private final String              rootConfluenceUrl;
     private final CloseableHttpClient httpClient;
     private final String              username;
     private final String              password;
