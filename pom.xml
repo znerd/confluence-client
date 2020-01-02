@@ -92,7 +92,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13-rc-2</version> <!-- TODO: Upgrade to JUnit 5.x -->
+            <version>4.13</version> <!-- TODO: Upgrade to JUnit 5.x -->
             <scope>test</scope>
         </dependency>
         <dependency>
