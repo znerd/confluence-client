@@ -200,7 +200,7 @@ public class ConfluenceRestClient implements ConfluenceClient {
             final String headerValue = header.getValue();
             final String headerValueLC = headerValue.toLowerCase(Locale.US);
             final String expectedMimeType = "application/json";
-            if (!(headerValueLC.equals(expectedMimeType) || headerValueLC.equals(expectedMimeType + ';'))) {
+            if (!(headerValueLC.equals(expectedMimeType) || headerValueLC.startsWith(expectedMimeType + ';'))) {
                 throw new JsonParseRuntimeException("Unexpected [Content-Type] header value [" + headerValue + "], while expecting [" + expectedMimeType + "].");
             }
         }
