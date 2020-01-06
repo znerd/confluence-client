@@ -247,7 +247,7 @@ public class ConfluencePublisher {
         try {
             return new FileInputStream(filePath.toFile());
         } catch (FileNotFoundException e) {
-            throw new RuntimeException("Could not find attachment ", e);
+            throw new RuntimeException("Could not find attachment [" + filePath + "]; absolute path is [" + filePath.toAbsolutePath() + "].", e);
         }
     }
 
