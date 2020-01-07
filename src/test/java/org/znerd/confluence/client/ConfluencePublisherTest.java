@@ -30,6 +30,7 @@ import org.znerd.confluence.client.http.ConfluenceRestClient;
 import org.znerd.confluence.client.http.NotFoundException;
 import org.znerd.confluence.client.metadata.ConfluencePageMetadata;
 import org.znerd.confluence.client.metadata.ConfluencePublisherMetadata;
+import org.znerd.confluence.client.metadata.FileConfluencePageMetadata;
 import org.znerd.confluence.client.utils.IoUtils;
 
 import java.io.FileInputStream;
@@ -581,8 +582,9 @@ public class ConfluencePublisherTest {
 
     private static void resolveAbsoluteContentFileAndAttachmentsPath(List<ConfluencePageMetadata> pages, Path contentRoot) {
         pages.forEach((page) -> {
-            page.setContentFilePath(contentRoot.resolve(page.getContentFilePath()).toString());
-            page.setAttachments(page.getAttachments().entrySet().stream().collect(toMap(
+            final FileConfluencePageMetadata filePage = (FileConfluencePageMetadata) page;
+            filePage.setContentFilePath(contentRoot.resolve(filePage.getContentFilePath()).toString());
+            filePage.setAttachments(page.getAttachments().entrySet().stream().collect(toMap(
                 (entry) -> entry.getValue(),
                 (entry) -> contentRoot.resolve(entry.getKey()).toString()
             )));

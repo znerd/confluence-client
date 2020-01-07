@@ -178,7 +178,7 @@ public class ConfluencePublisher {
             // fall through
         }
 
-        final String content = IoUtils.fileContent(page.getContentFilePath(), UTF_8);
+        final String content = page.getContent();
         final String contentId = this.confluenceClient.addPageUnderAncestor(spaceKey, ancestorId, page.getTitle(), content, this.versionMessage);
         this.confluenceClient.setPropertyByKey(contentId, CONTENT_HASH_PROPERTY_KEY, hash(content));
         this.confluencePublisherListener.pageAdded(new ConfluencePage(contentId, page.getTitle(), content, INITIAL_PAGE_VERSION));
@@ -186,7 +186,7 @@ public class ConfluencePublisher {
     }
 
     private void updatePage(String contentId, String ancestorId, ConfluencePageMetadata page) {
-        final String content = IoUtils.fileContent(page.getContentFilePath(), UTF_8);
+        final String content = page.getContent();
         final ConfluencePage existingPage = this.confluenceClient.getPageWithContentAndVersionById(contentId);
         final String existingContentHash = this.confluenceClient.getPropertyByKey(contentId, CONTENT_HASH_PROPERTY_KEY);
         final String newContentHash = hash(content);

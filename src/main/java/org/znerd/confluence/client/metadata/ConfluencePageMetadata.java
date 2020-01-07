@@ -16,59 +16,18 @@
 
 package org.znerd.confluence.client.metadata;
 
-import org.znerd.confluence.client.support.RuntimeUse;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Collections.emptyList;
+@JsonDeserialize(as = FileConfluencePageMetadata.class)
+public interface ConfluencePageMetadata {
+    String getTitle();
 
-public class ConfluencePageMetadata {
+    String getContent();
 
-    private String                       title;
-    private String                       contentFilePath;
-    private List<ConfluencePageMetadata> children    = new ArrayList<>();
-    private Map<String, String>          attachments = new HashMap<>();
+    List<ConfluencePageMetadata> getChildren();
 
-    public String getTitle() {
-        return this.title;
-    }
-
-    @RuntimeUse
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContentFilePath() {
-        return this.contentFilePath;
-    }
-
-    @RuntimeUse
-    public void setContentFilePath(String contentFilePath) {
-        this.contentFilePath = contentFilePath;
-    }
-
-    public List<ConfluencePageMetadata> getChildren() {
-        if (this.children == null) {
-            return emptyList();
-        } else {
-            return this.children;
-        }
-    }
-
-    @RuntimeUse
-    public void setChildren(List<ConfluencePageMetadata> children) {
-        this.children = children;
-    }
-
-    public Map<String, String> getAttachments() {
-        return this.attachments;
-    }
-
-    @RuntimeUse
-    public void setAttachments(Map<String, String> attachments) {
-        this.attachments = attachments;
-    }
+    Map<String, String> getAttachments();
 }
