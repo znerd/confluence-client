@@ -88,7 +88,7 @@ public class ConfluenceRestClient implements ConfluenceClient {
     }
 
     @Override
-    public String getRootConfluenceUrl() {
+    public String getConfluenceRootUrl() {
         return rootConfluenceUrl;
     }
 

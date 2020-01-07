@@ -73,18 +73,23 @@ public class ConfluencePublisher {
         assertMandatoryParameter(isNotBlank(spaceKey), "spaceKey");
         assertMandatoryParameter(isNotBlank(ancestorId), "ancestorId");
 
+        final ConfluencePublishResultBuilder resultBuilder = ConfluencePublishResult.builder()
+                .setRootConfluenceUrl(confluenceClient.getConfluenceRootUrl())
+                .setSpaceKey(spaceKey)
+                .setAncestorId(ancestorId);
+
         final List<ConfluencePageMetadata> pages = this.metadata.getPages();
         if (this.publishingStrategy.isAppendToAncestor()) {
-            startPublishingUnderAncestorId(pages, spaceKey, ancestorId);
+            startPublishingUnderAncestorId(resultBuilder, pages, spaceKey, ancestorId);
         } else if (this.publishingStrategy.isReplaceAncestor()) {
-            startPublishingReplacingAncestorId(singleRootPage(this.metadata), spaceKey, ancestorId);
+            startPublishingReplacingAncestorId(resultBuilder, singleRootPage(this.metadata), spaceKey, ancestorId);
         } else {
             throw new IllegalArgumentException("Invalid publishing strategy '" + this.publishingStrategy + "'");
         }
 
         this.confluencePublisherListener.publishCompleted();
 
-        return new BasicConfluencePublishResult(confluenceClient.getRootConfluenceUrl(), spaceKey, ancestorId, pages);
+        return resultBuilder.build();
     }
 
     private static ConfluencePageMetadata singleRootPage(ConfluencePublisherMetadata metadata) {
@@ -105,28 +110,31 @@ public class ConfluencePublisher {
         return null;
     }
 
-    private void startPublishingReplacingAncestorId(ConfluencePageMetadata rootPage, String spaceKey, String ancestorId) {
+    private void startPublishingReplacingAncestorId(final ConfluencePublishResultBuilder resultBuilder, ConfluencePageMetadata rootPage, String spaceKey, String ancestorId) {
         if (rootPage != null) {
             updatePage(ancestorId, null, rootPage);
+            resultBuilder.addPage(spaceKey, ancestorId, rootPage, ancestorId);
 
             deleteConfluenceAttachmentsNotPresentUnderPage(ancestorId, rootPage.getAttachments());
             addAttachments(ancestorId, rootPage.getAttachments());
 
-            startPublishingUnderAncestorId(rootPage.getChildren(), spaceKey, ancestorId);
+            startPublishingUnderAncestorId(resultBuilder, rootPage.getChildren(), spaceKey, ancestorId);
         }
     }
 
-    private void startPublishingUnderAncestorId(List<ConfluencePageMetadata> pages, String spaceKey, String ancestorId) {
+    private void startPublishingUnderAncestorId(final ConfluencePublishResultBuilder resultBuilder, List<ConfluencePageMetadata> pages, String spaceKey, String ancestorId) {
         if (this.publishingStrategy.isDeleteExistingChildren()) {
             deleteConfluencePagesNotPresentUnderAncestor(pages, ancestorId);
         }
         pages.forEach(page -> {
             String contentId = addOrUpdatePageUnderAncestor(spaceKey, ancestorId, page);
+            resultBuilder.addPage(spaceKey, ancestorId, page, contentId);
 
-            deleteConfluenceAttachmentsNotPresentUnderPage(contentId, page.getAttachments());
-            addAttachments(contentId, page.getAttachments());
+            final Map<String, String> attachments = page.getAttachments();
+            deleteConfluenceAttachmentsNotPresentUnderPage(contentId, attachments);
+            addAttachments(contentId, attachments);
 
-            startPublishingUnderAncestorId(page.getChildren(), spaceKey, contentId);
+            startPublishingUnderAncestorId(resultBuilder, page.getChildren(), spaceKey, contentId);
         });
     }
 

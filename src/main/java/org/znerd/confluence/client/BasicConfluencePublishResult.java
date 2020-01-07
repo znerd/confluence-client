@@ -1,7 +1,5 @@
 package org.znerd.confluence.client;
 
-import org.znerd.confluence.client.metadata.ConfluencePageMetadata;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,24 +8,24 @@ import static org.znerd.confluence.client.utils.AssertUtils.assertNotBlank;
 import static org.znerd.confluence.client.utils.AssertUtils.assertNotNull;
 
 public final class BasicConfluencePublishResult implements ConfluencePublishResult {
-    private final String rootConfluenceUrl;
+    private final String confluenceRootUrl;
     private final String spaceKey;
     private final String ancestorId;
-    private final List<ConfluencePageMetadata> pages;
+    private final List<PublishedPageInfo> pages;
 
-    public BasicConfluencePublishResult(final String rootConfluenceUrl,
+    public BasicConfluencePublishResult(final String confluenceRootUrl,
                                         final String spaceKey,
                                         final String ancestorId,
-                                        final List<ConfluencePageMetadata> pages) {
-        this.rootConfluenceUrl = assertNotBlank(rootConfluenceUrl, "rootConfluenceUrl");
+                                        final List<PublishedPageInfo> pages) {
+        this.confluenceRootUrl = assertNotBlank(confluenceRootUrl, "confluenceRootUrl");
         this.spaceKey = assertNotBlank(spaceKey, "spaceKey");
         this.ancestorId = assertNotBlank(ancestorId, "ancestorId");
         this.pages = unmodifiableList(new ArrayList<>(assertNotNull(pages, "pages")));
     }
 
     @Override
-    public String getRootConfluenceUrl() {
-        return rootConfluenceUrl;
+    public String getConfluenceRootUrl() {
+        return confluenceRootUrl;
     }
 
     @Override
@@ -41,7 +39,7 @@ public final class BasicConfluencePublishResult implements ConfluencePublishResu
     }
 
     @Override
-    public List<ConfluencePageMetadata> getPages() {
+    public List<PublishedPageInfo> getPages() {
         return pages;
     }
 }

@@ -1,15 +1,17 @@
 package org.znerd.confluence.client;
 
-import org.znerd.confluence.client.metadata.ConfluencePageMetadata;
-
 import java.util.List;
 
 public interface ConfluencePublishResult {
-    String getRootConfluenceUrl();
+    static ConfluencePublishResultBuilder builder() {
+        return new ConfluencePublishResultBuilder();
+    }
+
+    String getConfluenceRootUrl();
 
     String getSpaceKey();
 
     String getAncestorId();
 
-    List<ConfluencePageMetadata> getPages();
+    List<PublishedPageInfo> getPages();
 }

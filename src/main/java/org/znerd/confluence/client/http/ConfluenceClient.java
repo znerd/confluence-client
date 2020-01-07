@@ -21,7 +21,15 @@ import java.util.List;
 
 public interface ConfluenceClient {
 
-    String getRootConfluenceUrl();
+    /**
+     * @deprecated Use {@link #getConfluenceRootUrl()} instead.
+     */
+    @Deprecated
+    default String getRootConfluenceUrl() {
+        return getConfluenceRootUrl();
+    }
+
+    String getConfluenceRootUrl();
 
     String addPageUnderAncestor(String spaceKey, String ancestorId, String title, String content, String versionMessage);
 
