@@ -16,13 +16,7 @@
 
 package org.znerd.confluence.client.utils;
 
-import java.io.BufferedReader;
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.stream.Collectors;
 
@@ -35,15 +29,15 @@ public final class IoUtils {
     public static String fileContent(final String filePath, final Charset encoding) {
         try (FileInputStream fileInputStream = new FileInputStream(new File(filePath))) {
             return inputStreamAsString(fileInputStream, encoding);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not read file", e);
+        } catch (final IOException e) {
+            throw new RuntimeException("Could not read file [" + filePath + "] using encoding [" + encoding + "].", e);
         }
     }
 
     public static String inputStreamAsString(final InputStream is, final Charset encoding) {
         try (BufferedReader buffer = new BufferedReader(new InputStreamReader(is, encoding))) {
             return buffer.lines().collect(Collectors.joining("\n"));
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException("Could not convert InputStream to String ", e);
         }
     }
@@ -51,7 +45,7 @@ public final class IoUtils {
     public static void closeQuietly(final Closeable closeable) {
         try {
             closeable.close();
-        } catch (IOException ignored) {
+        } catch (final IOException ignored) {
         }
     }
 }
