@@ -40,6 +40,7 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 import static org.znerd.confluence.client.utils.AssertUtils.assertMandatoryParameter;
+import static org.znerd.confluence.client.utils.AssertUtils.assertNotNull;
 
 public class ConfluencePublisher {
 
@@ -53,16 +54,18 @@ public class ConfluencePublisher {
     private final String versionMessage;
 
     public ConfluencePublisher(ConfluencePublisherMetadata metadata, PublishingStrategy publishingStrategy, ConfluenceClient confluenceClient) {
-        this(metadata, publishingStrategy, confluenceClient, new NoOpConfluencePublisherListener(), null);
+        this(metadata, publishingStrategy, confluenceClient, null, null);
     }
 
-    public ConfluencePublisher(ConfluencePublisherMetadata metadata, PublishingStrategy publishingStrategy,
-                               ConfluenceClient confluenceClient, ConfluencePublisherListener confluencePublisherListener,
-                               String versionMessage) {
-        this.metadata = metadata;
-        this.publishingStrategy = publishingStrategy;
-        this.confluenceClient = confluenceClient;
-        this.confluencePublisherListener = confluencePublisherListener;
+    public ConfluencePublisher(final ConfluencePublisherMetadata metadata,
+                               final PublishingStrategy publishingStrategy,
+                               final ConfluenceClient confluenceClient,
+                               final ConfluencePublisherListener confluencePublisherListener,
+                               final String versionMessage) {
+        this.metadata = assertNotNull(metadata, "metadata");
+        this.publishingStrategy = assertNotNull(publishingStrategy, "publishingStrategy");
+        this.confluenceClient = assertNotNull(confluenceClient, "confluenceClient");
+        this.confluencePublisherListener = confluencePublisherListener != null ? confluencePublisherListener : NoOpConfluencePublisherListener.SINGLETON;
         this.versionMessage = versionMessage;
     }
 
@@ -251,30 +254,15 @@ public class ConfluencePublisher {
         }
     }
 
-    private static FileInputStream fileInputStream(Path filePath) {
+    private static FileInputStream fileInputStream(final Path filePath) {
         try {
             return new FileInputStream(filePath.toFile());
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             throw new RuntimeException("Could not find attachment [" + filePath + "]; absolute path is [" + filePath.toAbsolutePath() + "].", e);
         }
     }
 
     private static class NoOpConfluencePublisherListener implements ConfluencePublisherListener {
-
-        @Override
-        public void pageAdded(ConfluencePage addedPage) {
-        }
-
-        @Override
-        public void pageUpdated(ConfluencePage existingPage, ConfluencePage updatedPage) {
-        }
-
-        @Override
-        public void pageDeleted(ConfluencePage deletedPage) {
-        }
-
-        @Override
-        public void publishCompleted() {
-        }
+        private static NoOpConfluencePublisherListener SINGLETON = new NoOpConfluencePublisherListener();
     }
 }

@@ -3,12 +3,19 @@ package org.znerd.confluence.client;
 import org.znerd.confluence.client.http.ConfluencePage;
 
 public interface ConfluencePublisherListener {
+    default void pageAdded(ConfluencePage addedPage) {
+        // empty
+    }
 
-    void pageAdded(ConfluencePage addedPage);
+    default void pageUpdated(ConfluencePage existingPage, ConfluencePage updatedPage) {
+        // empty
+    }
 
-    void pageUpdated(ConfluencePage existingPage, ConfluencePage updatedPage);
+    default void pageDeleted(ConfluencePage deletedPage) {
+        // empty
+    }
 
-    void pageDeleted(ConfluencePage deletedPage);
-
-    void publishCompleted();
+    default void publishCompleted() {
+        // empty
+    }
 }
