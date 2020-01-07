@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfluencePublisherMetadata {
-
     private String                       spaceKey;
     private String                       ancestorId;
     private List<ConfluencePageMetadata> pages = new ArrayList<>();

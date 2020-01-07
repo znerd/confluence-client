@@ -32,7 +32,7 @@ public final class IoUtils {
         throw new UnsupportedOperationException("Utils class cannot be instantiated");
     }
 
-    public static String fileContent(String filePath, Charset encoding) {
+    public static String fileContent(final String filePath, final Charset encoding) {
         try (FileInputStream fileInputStream = new FileInputStream(new File(filePath))) {
             return inputStreamAsString(fileInputStream, encoding);
         } catch (IOException e) {
@@ -40,7 +40,7 @@ public final class IoUtils {
         }
     }
 
-    public static String inputStreamAsString(InputStream is, Charset encoding) {
+    public static String inputStreamAsString(final InputStream is, final Charset encoding) {
         try (BufferedReader buffer = new BufferedReader(new InputStreamReader(is, encoding))) {
             return buffer.lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
@@ -48,7 +48,7 @@ public final class IoUtils {
         }
     }
 
-    public static void closeQuietly(Closeable closeable) {
+    public static void closeQuietly(final Closeable closeable) {
         try {
             closeable.close();
         } catch (IOException ignored) {
