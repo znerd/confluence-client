@@ -432,4 +432,28 @@ class HttpRequestFactory {
             return new PagePayloadBuilder();
         }
     }
+    
+    public class LabelPayload {
+
+        private String prefix;
+        private String name;
+
+        @RuntimeUse
+        public String getPrefix() {
+            return prefix;
+        }
+
+        public void setPrefix(String prefix) {
+            this.prefix = prefix;
+        }
+
+        @RuntimeUse
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
 }
