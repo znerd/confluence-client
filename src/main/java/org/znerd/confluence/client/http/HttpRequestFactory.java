@@ -276,6 +276,33 @@ class HttpRequestFactory {
 
         return postRequest;
     }
+    
+    public HttpDelete deleteLabelFromPageRequest(String contentId, String label) {
+        assertMandatoryParameter(isNotBlank(contentId), "contentId");
+        assertMandatoryParameter(isNotBlank(label), "label");
+
+        return new HttpDelete(this.confluenceRestApiEndpoint + "/content/" + contentId + "/label/" + label);
+    }
+
+    public HttpPost addLabeltoPageRequest(String contentId, String label) {
+        return addLabeltoPageRequest(contentId, "global", label);
+    }
+    
+    public HttpPost addLabeltoPageRequest(String contentId, String prefix, String label) {
+        assertMandatoryParameter(isNotBlank(contentId), "contentId");
+        assertMandatoryParameter(isNotBlank(prefix), "prefix");
+        assertMandatoryParameter(isNotBlank(label), "label");
+
+        LabelPayload labelPayload = new LabelPayload();
+        labelPayload.setPrefix(prefix);
+        labelPayload.setName(label);
+
+        HttpPost postRequest = new HttpPost(this.confluenceRestApiEndpoint + "/content/" + contentId + "/label");
+        postRequest.setEntity(httpEntityWithJsonPayload(labelPayload));
+        postRequest.addHeader(APPLICATION_JSON_UTF8_HEADER);
+
+        return postRequest;
+    }
 
     private static HttpPost addPageHttpPost(String confluenceRestApiEndpoint, PagePayload pagePayload) {
         HttpPost postRequest = new HttpPost(confluenceRestApiEndpoint + "/content");
