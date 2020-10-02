@@ -438,7 +438,6 @@ class HttpRequestFactory {
         private String prefix;
         private String name;
 
-        @RuntimeUse
         public String getPrefix() {
             return prefix;
         }
@@ -447,7 +446,6 @@ class HttpRequestFactory {
             this.prefix = prefix;
         }
 
-        @RuntimeUse
         public String getName() {
             return name;
         }
