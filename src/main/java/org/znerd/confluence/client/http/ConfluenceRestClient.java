@@ -411,6 +411,21 @@ public class ConfluenceRestClient implements ConfluenceClient {
         return "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes(UTF_8));
     }
 
+    public void addLabeltoPage(String contentId, String label) {
+        HttpPost addLabeltoPageRequest = this.httpRequestFactory.addLabeltoPageRequest(contentId, label.toLowerCase());
+        sendRequestAndFailIfNot20x(addLabeltoPageRequest);
+    }
+    
+    public void addLabeltoPage(String contentId, String prefix, String label) {
+        HttpPost addLabeltoPageRequest = this.httpRequestFactory.addLabeltoPageRequest(contentId, prefix.toLowerCase(), label.toLowerCase());
+        sendRequestAndFailIfNot20x(addLabeltoPageRequest);
+    }
+
+    public void deleteLabelFromPage(String contentId, String labelName) {
+        HttpDelete deleteLabelFromPageRequest = this.httpRequestFactory.deleteLabelFromPageRequest(contentId, labelName.toLowerCase());
+        sendRequest(deleteLabelFromPageRequest, (ignored) -> null);
+    }
+    
     public static class ProxyConfiguration {
 
         private final String  proxyScheme;
