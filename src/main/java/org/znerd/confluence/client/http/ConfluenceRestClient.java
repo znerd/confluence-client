@@ -318,14 +318,14 @@ public class ConfluenceRestClient implements ConfluenceClient {
         sendRequest(deletePropertyByKeyRequest, (ignored) -> null);
     }
 
-    private static ConfluenceLabel extractLabelFromJsonNode(JsonNode jsonNode) {      
+    private static ConfluenceLabel extractLabelFromJsonNode(JsonNode jsonNode) {
         String prefix = extractPrefixFromJsonNode(jsonNode);
         String name = extractNameFromJsonNode(jsonNode);
         String id = extractIdFromJsonNode(jsonNode);
-        
+
         return new ConfluenceLabel(prefix, name, id);
     }
-    
+
     private static ConfluencePage extractConfluencePageWithContent(JsonNode jsonNode) {
         String id = extractIdFromJsonNode(jsonNode);
         String title = extractTitleFromJsonNode(jsonNode);
@@ -371,11 +371,11 @@ public class ConfluenceRestClient implements ConfluenceClient {
     private static String extractPropertyValueFromJsonNode(JsonNode jsonNode) {
         return jsonNode.path("value").asText();
     }
-    
+
     private static String extractPrefixFromJsonNode(JsonNode jsonNode) {
         return jsonNode.get("prefix").asText();
     }
-    
+
     private static String extractNameFromJsonNode(JsonNode jsonNode) {
         return jsonNode.get("name").asText();
     }
@@ -429,46 +429,44 @@ public class ConfluenceRestClient implements ConfluenceClient {
         return "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes(UTF_8));
     }
 
-    public void addLabeltoPage(String contentId, String label) {
-        HttpPost addLabeltoPageRequest = this.httpRequestFactory.addLabeltoPageRequest(contentId, label.toLowerCase());
-        sendRequestAndFailIfNot20x(addLabeltoPageRequest);
-    }
-    
-    public void addLabeltoPage(String contentId, String prefix, String label) {
-        HttpPost addLabeltoPageRequest = this.httpRequestFactory.addLabeltoPageRequest(contentId, prefix.toLowerCase(), label.toLowerCase());
-        sendRequestAndFailIfNot20x(addLabeltoPageRequest);
+    @Override
+    public void addLabelToPage(String contentId, String label) {
+        HttpPost addLabelToPageRequest = this.httpRequestFactory.addLabelToPageRequest(contentId, label.toLowerCase());
+        sendRequestAndFailIfNot20x(addLabelToPageRequest);
     }
 
+    @Override
+    public void addLabelToPage(String contentId, String prefix, String label) {
+        HttpPost addLabelToPageRequest = this.httpRequestFactory.addLabelToPageRequest(contentId, prefix.toLowerCase(), label.toLowerCase());
+        sendRequestAndFailIfNot20x(addLabelToPageRequest);
+    }
+
+    @Override
     public void deleteLabelFromPage(String contentId, String labelName) {
         HttpDelete deleteLabelFromPageRequest = this.httpRequestFactory.deleteLabelFromPageRequest(contentId, labelName.toLowerCase());
         sendRequest(deleteLabelFromPageRequest, (ignored) -> null);
     }
-    
-    public ArrayList<ConfluenceLabel> getLabelsFromPage(String contentId) {
 
-        ArrayList<ConfluenceLabel> labels = new ArrayList<ConfluenceLabel>();   
+    @Override
+    public List<ConfluenceLabel> getLabelsFromPage(String contentId) {
         HttpGet getLabelsByContentIdRequest = this.httpRequestFactory.getLabelsByContentIdRequest(contentId);
 
-        sendRequestAndFailIfNot20x(getLabelsByContentIdRequest, (response) -> {
+        return sendRequestAndFailIfNot20x(getLabelsByContentIdRequest, response -> {
+            List<ConfluenceLabel> labels = new ArrayList<>();
             JsonNode jsonNode = parseJsonResponse(response);
-    
+
             int numberOfResults = jsonNode.get("size").asInt();
-            if (numberOfResults == 0) {
-                throw new NotFoundException();
-            }
             if (numberOfResults > 0) {
                 for (Iterator<JsonNode> labelIterator = jsonNode.withArray("results").elements(); labelIterator.hasNext();) {
                     ConfluenceLabel confluenceLabel = extractLabelFromJsonNode(labelIterator.next());
                     labels.add(confluenceLabel);
                 }
             }
-            
+
             return labels;
         });
-        
-        return labels;
     }
-    
+
     public static class ProxyConfiguration {
 
         private final String  proxyScheme;

@@ -58,4 +58,12 @@ public interface ConfluenceClient {
     String getPropertyByKey(String contentId, String key);
 
     void deletePropertyByKey(String contentId, String key);
+
+    void addLabelToPage(String contentId, String label);
+
+    void addLabelToPage(String contentId, String prefix, String label);
+
+    void deleteLabelFromPage(String contentId, String labelName);
+
+    List<ConfluenceLabel> getLabelsFromPage(String contentId);
 }
