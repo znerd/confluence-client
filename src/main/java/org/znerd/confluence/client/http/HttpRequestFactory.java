@@ -276,7 +276,7 @@ class HttpRequestFactory {
 
         return postRequest;
     }
-    
+
     public HttpDelete deleteLabelFromPageRequest(String contentId, String label) {
         assertMandatoryParameter(isNotBlank(contentId), "contentId");
         assertMandatoryParameter(isNotBlank(label), "label");
@@ -284,18 +284,16 @@ class HttpRequestFactory {
         return new HttpDelete(this.confluenceRestApiEndpoint + "/content/" + contentId + "/label/" + label);
     }
 
-    public HttpPost addLabeltoPageRequest(String contentId, String label) {
-        return addLabeltoPageRequest(contentId, "global", label);
+    public HttpPost addLabelToPageRequest(String contentId, String label) {
+        return addLabelToPageRequest(contentId, "global", label);
     }
-    
-    public HttpPost addLabeltoPageRequest(String contentId, String prefix, String label) {
+
+    public HttpPost addLabelToPageRequest(String contentId, String prefix, String label) {
         assertMandatoryParameter(isNotBlank(contentId), "contentId");
         assertMandatoryParameter(isNotBlank(prefix), "prefix");
         assertMandatoryParameter(isNotBlank(label), "label");
 
-        LabelPayload labelPayload = new LabelPayload();
-        labelPayload.setPrefix(prefix);
-        labelPayload.setName(label);
+        LabelPayload labelPayload = new LabelPayload(prefix, label);
 
         HttpPost postRequest = new HttpPost(this.confluenceRestApiEndpoint + "/content/" + contentId + "/label");
         postRequest.setEntity(httpEntityWithJsonPayload(labelPayload));
@@ -303,16 +301,18 @@ class HttpRequestFactory {
 
         return postRequest;
     }
-    
+
     HttpGet getLabelsByContentIdRequest(String contentId) {
         assertMandatoryParameter(isNotBlank(contentId), "contentId");
 
-        URIBuilder uriBuilder = createUriBuilder(this.confluenceRestApiEndpoint + "/content/" + contentId + "/label");   
+        final String uriString = this.confluenceRestApiEndpoint + "/content/" + contentId + "/label";
+        URIBuilder uriBuilder = createUriBuilder(
+            uriString);
         HttpGet getLabelsByContentIdRequest;
         try {
             getLabelsByContentIdRequest = new HttpGet(uriBuilder.build().toString());
         } catch (URISyntaxException e) {
-            throw new RuntimeException("Invalid URL", e);
+            throw new RuntimeException("Invalid URL: [" + uriString + ']', e);
         }
 
         return getLabelsByContentIdRequest;
@@ -446,26 +446,22 @@ class HttpRequestFactory {
             return new PagePayloadBuilder();
         }
     }
-    
-    public class LabelPayload {
 
-        private String prefix;
-        private String name;
+    public class LabelPayload {
+        private final String prefix;
+        private final String name;
+
+        public LabelPayload(final String prefix, final String name) {
+            this.prefix = prefix;
+            this.name = name;
+        }
 
         public String getPrefix() {
             return prefix;
         }
 
-        public void setPrefix(String prefix) {
-            this.prefix = prefix;
-        }
-
         public String getName() {
             return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
         }
     }
 }
