@@ -303,6 +303,20 @@ class HttpRequestFactory {
 
         return postRequest;
     }
+    
+    HttpGet getLabelsByContentIdRequest(String contentId) {
+        assertMandatoryParameter(isNotBlank(contentId), "contentId");
+
+        URIBuilder uriBuilder = createUriBuilder(this.confluenceRestApiEndpoint + "/content/" + contentId + "/label");   
+        HttpGet getLabelsByContentIdRequest;
+        try {
+            getLabelsByContentIdRequest = new HttpGet(uriBuilder.build().toString());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Invalid URL", e);
+        }
+
+        return getLabelsByContentIdRequest;
+    }
 
     private static HttpPost addPageHttpPost(String confluenceRestApiEndpoint, PagePayload pagePayload) {
         HttpPost postRequest = new HttpPost(confluenceRestApiEndpoint + "/content");
